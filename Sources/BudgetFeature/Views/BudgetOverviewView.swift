@@ -22,7 +22,7 @@ struct BudgetOverviewView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     if let budget = viewModel.monthlyBudget {
-                        Text("You’ve spent €\(budget.spent, specifier: "%.2f") of your €\(budget.total, specifier: "%.2f") budget")
+                        Text("You’ve spent €\(budget.amountSpent, specifier: "%.2f") of your €\(budget.totalBudget, specifier: "%.2f") budget")
                             .font(.headline)
                             .padding()
                     }
@@ -30,7 +30,7 @@ struct BudgetOverviewView: View {
                     List(viewModel.categories, id: \.name) { category in
                         NavigationLink(destination: CategoryDetailView(category: category)) {
                             VStack(alignment: .leading) {
-                                Text(category.name)
+                                Text(category.name.rawValue)
                                     .font(.headline)
                                 HStack {
                                     Text("€\(category.amountSpent, specifier: "%.2f") spent of €\(category.totalBudget, specifier: "%.2f")")

@@ -1,5 +1,5 @@
 //
-//  File name: BudgetCategory.swift
+//  File name: BudgetCategories.swift
 //  Project name: BudgetFeature
 //  Workspace name: budget-feature-example-for-ios
 //
@@ -10,8 +10,9 @@
 
 import Foundation
 
-struct BudgetCategory {
-    let name: BudgetCategories
-    let amountSpent: Double
-    let totalBudget: Double
+enum BudgetCategories: String {
+    case food = "Food"
+    case shopping = "Shopping"
+    case travel = "Travel"
+    case monthly = "Monthly"
 }

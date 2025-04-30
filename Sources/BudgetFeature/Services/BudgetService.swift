@@ -11,39 +11,42 @@
 import Foundation
 
 @MainActor
-class BudgetService {
-    func fetchMonthlyBudget() async -> (spent: Double, total: Double) {
-        do {
-            try await Task.sleep(nanoseconds: 1_000_000_000) // Simulate 1-second delay
-        } catch {
-            print("Error during sleep: \(error)")
-        }
-        return (spent: 500, total: 1000)
+final class BudgetService {
+    private let delayTime = 1.0
+
+    func fetchMonthlyBudget() async -> BudgetCategory {
+        await performWithDelay(returning: BudgetServiceMockData.monthlyBudget)
     }
 
     func fetchCategories() async -> [BudgetCategory] {
-        do {
-            try await Task.sleep(nanoseconds: 1_000_000_000) // Simulate 1-second delay
-        } catch {
-            print("Error during sleep: \(error)")
-        }
-        return [
-            BudgetCategory(name: "Food", amountSpent: 200, totalBudget: 300),
-            BudgetCategory(name: "Shopping", amountSpent: 150, totalBudget: 200),
-            BudgetCategory(name: "Travel", amountSpent: 100, totalBudget: 500)
-        ]
+        await performWithDelay(returning: BudgetServiceMockData.categories)
     }
-
-    func fetchTransactions(for category: String) async -> [Transaction] {
-        do {
-            try await Task.sleep(nanoseconds: 1_000_000_000) // Simulate 1-second delay
-        } catch {
-            print("Error during sleep: \(error)")
+    
+    func fetchTransactions(for category: BudgetCategories) async -> [Transaction] {
+        let transactions: [Transaction]
+        
+        switch category {
+        case .food:
+            transactions = BudgetServiceMockData.foodTransactions
+        case .shopping:
+            transactions = BudgetServiceMockData.shoppingTransactions
+        case .travel:
+            transactions = BudgetServiceMockData.travelTransactions
+        case .monthly:
+            transactions = [] // Skip monthly category
         }
-        return [
-            Transaction(description: "Grocery Store", amount: 30),
-            Transaction(description: "Restaurant", amount: 50),
-            Transaction(description: "Cafe", amount: 20)
-        ]
+        
+        return await performWithDelay(returning: transactions)
+    }
+}
+
+private extension BudgetService {
+    
+    func performWithDelay<T>(returning data: T) async -> T {
+        await withCheckedContinuation { continuation in
+            DispatchQueue.main.asyncAfter(deadline: .now() + delayTime) {
+                continuation.resume(returning: data)
+            }
+        }
     }
 }

@@ -2,7 +2,7 @@ import Foundation
 
 @MainActor
 class BudgetOverviewViewModel: ObservableObject {
-    @Published var monthlyBudget: (spent: Double, total: Double)? = nil
+    @Published var monthlyBudget: BudgetCategory? = nil
     @Published var categories: [BudgetCategory] = []
     @Published var isLoading = true
 

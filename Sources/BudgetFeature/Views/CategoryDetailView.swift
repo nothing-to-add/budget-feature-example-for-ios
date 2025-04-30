@@ -41,11 +41,11 @@ struct CategoryDetailView: View {
         .onAppear {
             viewModel.loadTransactions()
         }
-        .navigationTitle(viewModel.category.name)
+        .navigationTitle(viewModel.category.name.rawValue)
         .padding()
     }
 }
 
 #Preview {
-    CategoryDetailView(category: BudgetCategory(name: "Name", amountSpent: 300, totalBudget: 400))
+    CategoryDetailView(category: BudgetCategory(name: .food, amountSpent: 300, totalBudget: 400))
 }
