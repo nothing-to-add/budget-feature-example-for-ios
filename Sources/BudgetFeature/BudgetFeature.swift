@@ -7,7 +7,7 @@ public struct BudgetFeature {
     
     public init() {}
 
-    public func makeBudgetView() -> some View {
+    @MainActor public func makeBudgetView() -> some View {
         BudgetOverviewView()
     }
 }

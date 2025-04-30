@@ -12,24 +12,24 @@ import SwiftUI
 
 // Category Detail View
 struct CategoryDetailView: View {
-    let category: BudgetCategory
-    @State private var transactions: [Transaction] = []
-    @State private var isLoading = true
+    @StateObject private var viewModel: CategoryDetailViewModel
 
-    private let budgetService = BudgetService()
+    init(category: BudgetCategory) {
+        _viewModel = StateObject(wrappedValue: CategoryDetailViewModel(category: category))
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            if isLoading {
+            if viewModel.isLoading {
                 ProgressView("Loading...")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                Text("Total spent: €\(category.amountSpent, specifier: "%.2f")")
+                Text("Total spent: €\(viewModel.category.amountSpent, specifier: "%.2f")")
                     .font(.headline)
-                Text("Remaining: €\(category.totalBudget - category.amountSpent, specifier: "%.2f")")
+                Text("Remaining: €\(viewModel.category.totalBudget - viewModel.category.amountSpent, specifier: "%.2f")")
                     .font(.subheadline)
 
-                List(transactions, id: \.description) { transaction in
+                List(viewModel.transactions, id: \.description) { transaction in
                     HStack {
                         Text(transaction.description)
                         Spacer()
@@ -39,13 +39,9 @@ struct CategoryDetailView: View {
             }
         }
         .onAppear {
-            Task {
-                isLoading = true
-                transactions = await budgetService.fetchTransactions(for: category.name)
-                isLoading = false
-            }
+            viewModel.loadTransactions()
         }
-        .navigationTitle(category.name)
+        .navigationTitle(viewModel.category.name)
         .padding()
     }
 }
