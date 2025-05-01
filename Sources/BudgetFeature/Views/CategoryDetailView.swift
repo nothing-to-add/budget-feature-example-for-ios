@@ -21,49 +21,98 @@ struct CategoryDetailView: View {
     }
 
     var body: some View {
-        Group {
+        ZStack {
+            // Common background color for the entire screen
+            Color(.systemGray6)
+                .edgesIgnoringSafeArea(.all)
+
             if viewModel.isLoading {
                 ProgressView(Localization.loading)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .scaleEffect(1.5)
             } else {
-                VStack(alignment: .leading, spacing: 20) {
-                    Text(String(format: Localization.totalSpent, viewModel.category.amountSpent))
-                        .font(.title2)
-                        .fontWeight(.semibold)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        // Title card
+                        Text(viewModel.category.name.rawValue)
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.blue.opacity(0.2))
+                            .cornerRadius(10)
+                            .padding(.horizontal)
+
+                        // Total spent card
+                        HStack {
+                            Image(systemName: "eurosign.circle.fill")
+                                .font(.largeTitle)
+                                .foregroundColor(.green)
+                            VStack(alignment: .leading) {
+                                Text(Localization.totalSpent)
+                                    .font(.headline)
+                                Text("€\(viewModel.category.amountSpent, specifier: "%.2f")")
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                            }
+                        }
                         .padding()
-                        .background(LinearGradient(gradient: Gradient(colors: [Color.green.opacity(0.2), Color.green.opacity(0.5)]), startPoint: .top, endPoint: .bottom))
+                        .background(Color.green.opacity(0.2))
                         .cornerRadius(10)
                         .padding(.horizontal)
 
-                    Text(String(format: Localization.remainingBudget, viewModel.category.totalBudget - viewModel.category.amountSpent))
-                        .font(.title3)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal)
-
-                    List(viewModel.transactions, id: \.description) { transaction in
+                        // Remaining budget card
                         HStack {
+                            Image(systemName: "wallet.pass.fill")
+                                .font(.largeTitle)
+                                .foregroundColor(.orange)
                             VStack(alignment: .leading) {
-                                Text(transaction.description)
+                                Text(Localization.remainingBudget)
                                     .font(.headline)
-                                Text("€\(transaction.amount, specifier: "%.2f")")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
+                                Text("€\(viewModel.category.totalBudget - viewModel.category.amountSpent, specifier: "%.2f")")
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
                             }
-                            Spacer()
                         }
                         .padding()
-                        .background(LinearGradient(gradient: Gradient(colors: [Color.gray.opacity(0.1), Color.gray.opacity(0.3)]), startPoint: .leading, endPoint: .trailing))
-                        .cornerRadius(8)
+                        .background(Color.orange.opacity(0.2))
+                        .cornerRadius(10)
+                        .padding(.horizontal)
+
+                        // Transactions list card
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text(Localization.transactions)
+                                .font(.headline)
+                                .padding(.bottom, 5)
+
+                            ForEach(viewModel.transactions, id: \.description) { transaction in
+                                HStack {
+                                    VStack(alignment: .leading) {
+                                        Text(transaction.description)
+                                            .font(.headline)
+                                        Text("€\(transaction.amount, specifier: "%.2f")")
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    Spacer()
+                                }
+                                .padding()
+                                .background(Color.gray.opacity(0.1))
+                                .cornerRadius(8)
+                            }
+                        }
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .padding(.horizontal)
                     }
-                    .listStyle(InsetGroupedListStyle())
                 }
             }
         }
         .onAppear {
             viewModel.loadTransactions()
         }
-        .navigationTitle(viewModel.category.name.rawValue)
+        .navigationTitle("")
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -75,7 +124,6 @@ struct CategoryDetailView: View {
                 }
             }
         }
-        .padding()
     }
 }
 

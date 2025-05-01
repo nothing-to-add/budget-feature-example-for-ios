@@ -14,49 +14,79 @@ import Charts
 // Budget Overview View
 struct BudgetOverviewView: View {
     @StateObject private var viewModel = BudgetOverviewViewModel()
-    
+
     var body: some View {
         NavigationView {
-            if viewModel.isLoading {
-                ProgressView(Localization.loading)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .scaleEffect(1.5)
-            } else {
-                VStack(alignment: .leading, spacing: 20) {
-                    if let budget = viewModel.monthlyBudget {
-                        Text(String(format: Localization.spentBudget, budget.amountSpent, budget.totalBudget))
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .padding()
-                            .background(LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.2), Color.blue.opacity(0.5)]), startPoint: .top, endPoint: .bottom))
-                            .cornerRadius(10)
-                            .padding(.horizontal)
-                    }
+            ZStack {
+                // Common background color for the entire screen
+                Color(.systemGray6)
+                    .edgesIgnoringSafeArea(.all)
 
-                    List(viewModel.categories, id: \.name) { category in
-                        NavigationLink(destination: CategoryDetailView(category: category)) {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text(category.name.rawValue)
-                                        .font(.headline)
-                                    Text(String(format: Localization.spentOfTotal, category.amountSpent, category.totalBudget))
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
+                if viewModel.isLoading {
+                    ProgressView(Localization.loading)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .scaleEffect(1.5)
+                } else {
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 20) {
+                            // Monthly budget card
+                            if let budget = viewModel.monthlyBudget {
+                                HStack {
+                                    Image(systemName: "calendar.circle.fill")
+                                        .font(.largeTitle)
+                                        .foregroundColor(.blue)
+                                    VStack(alignment: .leading) {
+                                        Text(Localization.monthlyBudget)
+                                            .font(.headline)
+                                        Text(String(format: Localization.spentBudget, budget.amountSpent, budget.totalBudget))
+                                            .font(.title2)
+                                            .fontWeight(.semibold)
+                                    }
                                 }
-                                Spacer()
-                                ProgressView(value: category.amountSpent, total: category.totalBudget)
-                                    .frame(width: 100)
+                                .padding()
+                                .background(Color.blue.opacity(0.2))
+                                .cornerRadius(10)
+                                .padding(.horizontal)
+                            }
+
+                            // Categories list card
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text(Localization.categories)
+                                    .font(.headline)
+                                    .padding(.bottom, 5)
+
+                                ForEach(viewModel.categories, id: \.name) { category in
+                                    NavigationLink(destination: CategoryDetailView(category: category)) {
+                                        HStack {
+                                            Image(systemName: "folder.fill")
+                                                .font(.title2)
+                                                .foregroundColor(.orange)
+                                            VStack(alignment: .leading, spacing: 5) {
+                                                Text(category.name.rawValue)
+                                                    .font(.headline)
+                                                Text(String(format: Localization.spentOfTotal, category.amountSpent, category.totalBudget))
+                                                    .font(.subheadline)
+                                                    .foregroundColor(.secondary)
+                                            }
+                                            Spacer()
+                                            ProgressView(value: category.amountSpent, total: category.totalBudget)
+                                                .frame(width: 100)
+                                        }
+                                        .padding()
+                                        .background(Color.orange.opacity(0.1))
+                                        .cornerRadius(8)
+                                    }
+                                }
                             }
                             .padding()
-                            .background(LinearGradient(gradient: Gradient(colors: [Color.gray.opacity(0.1), Color.gray.opacity(0.3)]), startPoint: .leading, endPoint: .trailing))
-                            .cornerRadius(8)
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .padding(.horizontal)
                         }
                     }
-                    .listStyle(InsetGroupedListStyle())
                 }
             }
         }
-        .background(LinearGradient(gradient: Gradient(colors: [Color.white, Color.blue.opacity(0.1)]), startPoint: .top, endPoint: .bottom))
         .onAppear {
             withAnimation {
                 viewModel.loadBudgetData()

@@ -18,10 +18,13 @@ struct Localization {
     static let budgetOverviewTitle = "Budget Overview"
     static let spentBudget = "You’ve spent €%.2f of your €%.2f budget"
     static let spentOfTotal = "€%.2f spent of €%.2f"
+    static let monthlyBudget = "Monthly Budget"
+    static let categories = "Categories"
 
     // Category Detail
-    static let totalSpent = "Total spent: €%.2f"
-    static let remainingBudget = "Remaining: €%.2f"
+    static let totalSpent = "Total spent:"
+    static let remainingBudget = "Remaining:"
+    static let transactions = "Transactions"
 
     // Transactions
     static let groceryStore = "Grocery Store"
