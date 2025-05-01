@@ -20,19 +20,29 @@ struct BudgetServiceMockData {
         BudgetCategory(name: .travel, amountSpent: 100, totalBudget: 500)
     ]
     
+    struct Localization {
+        static let groceryStore = "Grocery Store"
+        static let restaurant = "Restaurant"
+        static let cafe = "Cafe"
+        static let clothingStore = "Clothing Store"
+        static let electronics = "Electronics"
+        static let flightTicket = "Flight Ticket"
+        static let hotelBooking = "Hotel Booking"
+    }
+
     static let foodTransactions: [Transaction] = [
-        Transaction(description: "Grocery Store", amount: 30),
-        Transaction(description: "Restaurant", amount: 50),
-        Transaction(description: "Cafe", amount: 20)
+        Transaction(description: Localization.groceryStore, amount: 30),
+        Transaction(description: Localization.restaurant, amount: 50),
+        Transaction(description: Localization.cafe, amount: 20)
     ]
     
     static let shoppingTransactions: [Transaction] = [
-        Transaction(description: "Clothing Store", amount: 100),
-        Transaction(description: "Electronics", amount: 200)
+        Transaction(description: Localization.clothingStore, amount: 100),
+        Transaction(description: Localization.electronics, amount: 200)
     ]
     
     static let travelTransactions: [Transaction] = [
-        Transaction(description: "Flight Ticket", amount: 300),
-        Transaction(description: "Hotel Booking", amount: 150)
-        ]
+        Transaction(description: Localization.flightTicket, amount: 300),
+        Transaction(description: Localization.hotelBooking, amount: 150)
+    ]
 }

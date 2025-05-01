@@ -4,7 +4,6 @@
 import SwiftUI
 
 public struct BudgetFeature {
-    
     public init() {}
 
     @MainActor public func makeBudgetView() -> some View {

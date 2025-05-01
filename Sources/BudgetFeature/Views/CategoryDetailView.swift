@@ -9,32 +9,54 @@
 //
 
 import SwiftUI
+import Charts
 
 // Category Detail View
 struct CategoryDetailView: View {
     @StateObject private var viewModel: CategoryDetailViewModel
+    @Environment(\.dismiss) private var dismiss
 
     init(category: BudgetCategory) {
         _viewModel = StateObject(wrappedValue: CategoryDetailViewModel(category: category))
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        Group {
             if viewModel.isLoading {
-                ProgressView("Loading...")
+                ProgressView(Localization.loading)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .scaleEffect(1.5)
             } else {
-                Text("Total spent: €\(viewModel.category.amountSpent, specifier: "%.2f")")
-                    .font(.headline)
-                Text("Remaining: €\(viewModel.category.totalBudget - viewModel.category.amountSpent, specifier: "%.2f")")
-                    .font(.subheadline)
+                VStack(alignment: .leading, spacing: 20) {
+                    Text(String(format: Localization.totalSpent, viewModel.category.amountSpent))
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .padding()
+                        .background(LinearGradient(gradient: Gradient(colors: [Color.green.opacity(0.2), Color.green.opacity(0.5)]), startPoint: .top, endPoint: .bottom))
+                        .cornerRadius(10)
+                        .padding(.horizontal)
 
-                List(viewModel.transactions, id: \.description) { transaction in
-                    HStack {
-                        Text(transaction.description)
-                        Spacer()
-                        Text("€\(transaction.amount, specifier: "%.2f")")
+                    Text(String(format: Localization.remainingBudget, viewModel.category.totalBudget - viewModel.category.amountSpent))
+                        .font(.title3)
+                        .foregroundColor(.secondary)
+                        .padding(.horizontal)
+
+                    List(viewModel.transactions, id: \.description) { transaction in
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(transaction.description)
+                                    .font(.headline)
+                                Text("€\(transaction.amount, specifier: "%.2f")")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        .background(LinearGradient(gradient: Gradient(colors: [Color.gray.opacity(0.1), Color.gray.opacity(0.3)]), startPoint: .leading, endPoint: .trailing))
+                        .cornerRadius(8)
                     }
+                    .listStyle(InsetGroupedListStyle())
                 }
             }
         }
@@ -42,6 +64,17 @@ struct CategoryDetailView: View {
             viewModel.loadTransactions()
         }
         .navigationTitle(viewModel.category.name.rawValue)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "chevron.left")
+                        .font(.title2)
+                }
+            }
+        }
         .padding()
     }
 }

@@ -12,6 +12,10 @@ import Foundation
 
 @MainActor
 final class BudgetService {
+    static let shared = BudgetService()
+
+    private init() {}
+
     private let delayTime = 1.0
 
     func fetchMonthlyBudget() async -> BudgetCategory {

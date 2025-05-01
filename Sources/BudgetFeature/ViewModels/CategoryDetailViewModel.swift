@@ -6,7 +6,7 @@ class CategoryDetailViewModel: ObservableObject {
     @Published var isLoading = true
     let category: BudgetCategory
 
-    private let budgetService = BudgetService()
+    private let budgetService = BudgetService.shared
 
     init(category: BudgetCategory) {
         self.category = category
