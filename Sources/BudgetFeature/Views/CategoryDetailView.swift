@@ -9,7 +9,6 @@
 //
 
 import SwiftUI
-import Charts
 
 // Category Detail View
 struct CategoryDetailView: View {
@@ -37,46 +36,47 @@ struct CategoryDetailView: View {
                         Text(viewModel.category.name.rawValue)
                             .font(.largeTitle)
                             .fontWeight(.bold)
-                            .padding()
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(Color.blue.opacity(0.2))
+                            .frame(maxWidth: .infinity, alignment: .center)
                             .cornerRadius(10)
                             .padding(.horizontal)
 
-                        // Total spent card
                         HStack {
-                            Image(systemName: "eurosign.circle.fill")
-                                .font(.largeTitle)
-                                .foregroundColor(.green)
-                            VStack(alignment: .leading) {
-                                Text(Localization.totalSpent)
-                                    .font(.headline)
-                                Text("€\(viewModel.category.amountSpent, specifier: "%.2f")")
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
+                            // Total spent card
+                            HStack {
+                                Image(systemName: "eurosign.circle.fill")
+                                    .font(.largeTitle)
+                                    .foregroundColor(.green)
+                                VStack(alignment: .leading) {
+                                    Text(Localization.totalSpent)
+                                        .font(.headline)
+                                    Text("€\(viewModel.category.amountSpent, specifier: "%.2f")")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                }
                             }
-                        }
-                        .padding()
-                        .background(Color.green.opacity(0.2))
-                        .cornerRadius(10)
-                        .padding(.horizontal)
+                            .padding()
+                            .background(Color.green.opacity(0.2))
+                            .cornerRadius(10)
+                            
+                            Spacer()
 
-                        // Remaining budget card
-                        HStack {
-                            Image(systemName: "wallet.pass.fill")
-                                .font(.largeTitle)
-                                .foregroundColor(.orange)
-                            VStack(alignment: .leading) {
-                                Text(Localization.remainingBudget)
-                                    .font(.headline)
-                                Text("€\(viewModel.category.totalBudget - viewModel.category.amountSpent, specifier: "%.2f")")
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
+                            // Remaining budget card
+                            HStack {
+                                Image(systemName: "wallet.pass.fill")
+                                    .font(.largeTitle)
+                                    .foregroundColor(.orange)
+                                VStack(alignment: .leading) {
+                                    Text(Localization.remainingBudget)
+                                        .font(.headline)
+                                    Text("€\(viewModel.category.totalBudget - viewModel.category.amountSpent, specifier: "%.2f")")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                }
                             }
+                            .padding()
+                            .background(Color.orange.opacity(0.2))
+                            .cornerRadius(10)
                         }
-                        .padding()
-                        .background(Color.orange.opacity(0.2))
-                        .cornerRadius(10)
                         .padding(.horizontal)
 
                         // Transactions list card

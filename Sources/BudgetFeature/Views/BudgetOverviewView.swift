@@ -9,7 +9,6 @@
 //
 
 import SwiftUI
-import Charts
 
 // Budget Overview View
 struct BudgetOverviewView: View {
@@ -18,7 +17,6 @@ struct BudgetOverviewView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                // Common background color for the entire screen
                 Color(.systemGray6)
                     .edgesIgnoringSafeArea(.all)
 
@@ -43,6 +41,7 @@ struct BudgetOverviewView: View {
                                             .fontWeight(.semibold)
                                     }
                                 }
+                                .frame(maxWidth: .infinity)
                                 .padding()
                                 .background(Color.blue.opacity(0.2))
                                 .cornerRadius(10)
@@ -82,6 +81,20 @@ struct BudgetOverviewView: View {
                             .background(Color.white)
                             .cornerRadius(10)
                             .padding(.horizontal)
+                            
+                            // Pie chart visualization of categories
+                            if !viewModel.categories.isEmpty {
+                                PieChartView(
+                                    data: viewModel.categories.map { category in
+                                        ChartDataEntry(
+                                            value: category.amountSpent,
+                                            label: category.name.rawValue
+                                        )
+                                    },
+                                    title: Localization.pieChartTitle
+                                )
+                                .padding(.horizontal)
+                            }
                         }
                     }
                 }
@@ -95,32 +108,6 @@ struct BudgetOverviewView: View {
         .navigationTitle(Localization.budgetOverviewTitle)
         .navigationBarTitleDisplayMode(.inline)
     }
-}
-
-struct PieChartView: View {
-    let data: [ChartDataEntry]
-    let title: String
-    
-    var body: some View {
-        VStack {
-            Text(title)
-                .font(.headline)
-            Chart(data) { entry in
-                SectorMark(
-                    angle: .value("Value", entry.value),
-                    innerRadius: .ratio(0.5),
-                    outerRadius: .ratio(1.0)
-                )
-                .foregroundStyle(by: .value("Label", entry.label))
-            }
-        }
-    }
-}
-
-struct ChartDataEntry: Identifiable {
-    let id = UUID()
-    let value: Double
-    let label: String
 }
 
 #Preview {

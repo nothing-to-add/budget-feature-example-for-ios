@@ -20,6 +20,7 @@ struct Localization {
     static let spentOfTotal = "€%.2f spent of €%.2f"
     static let monthlyBudget = "Monthly Budget"
     static let categories = "Categories"
+    static let pieChartTitle = "Budget Categories"
 
     // Category Detail
     static let totalSpent = "Total spent:"
