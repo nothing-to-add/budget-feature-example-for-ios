@@ -37,3 +37,11 @@ extension Color {
         )
     }
 }
+
+extension Color {
+    
+    static let foodCategory: Color = .init(hex: "10B981") // Green
+    static let shoppingCategory: Color = .init(hex: "3B82F6") // Blue
+    static let travelCategory: Color = .init(hex: "8B5CF6") // Purple
+    static let monthlyCategory: Color = .init(hex: "F59E0B") // Orange
+}

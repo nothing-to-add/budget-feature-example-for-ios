@@ -95,34 +95,34 @@ struct CategoryDetailView: View {
                     .fill(
                         AngularGradient(
                             gradient: Gradient(colors: [
-                                categoryColor.opacity(0.8),
-                                categoryColor,
-                                categoryColor.opacity(0.4),
-                                categoryColor.opacity(0.8)
+                                viewModel.category.name.color.opacity(0.8),
+                                viewModel.category.name.color,
+                                viewModel.category.name.color.opacity(0.4),
+                                viewModel.category.name.color.opacity(0.8)
                             ]),
                             center: .center
                         )
                     )
                     .frame(width: 100, height: 100)
-                    .shadow(color: categoryColor.opacity(0.5), radius: 15, x: 0, y: 5)
+                    .shadow(color: viewModel.category.name.color.opacity(0.5), radius: 15, x: 0, y: 5)
                 
-                Image(systemName: categoryIcon)
+                Image(systemName: viewModel.category.name.icon)
                     .font(.system(size: 40))
                     .foregroundColor(.white)
             }
             .padding(.bottom, 8)
             
             // Category name with stylish typography
-            Text(viewModel.category.name.rawValue)
+            Text(viewModel.category.name.title)
                 .font(.system(size: 32, weight: .bold, design: .rounded))
                 .foregroundStyle(
                     LinearGradient(
-                        colors: [categoryColor, categoryColor.opacity(0.7)],
+                        colors: [viewModel.category.name.color, viewModel.category.name.color.opacity(0.7)],
                         startPoint: .leading,
                         endPoint: .trailing
                     )
                 )
-                .shadow(color: colorScheme == .dark ? .clear : categoryColor.opacity(0.2), radius: 2, x: 0, y: 2)
+                .shadow(color: colorScheme == .dark ? .clear : viewModel.category.name.color.opacity(0.2), radius: 2, x: 0, y: 2)
             
             // Budget progress indicator
             budgetProgressView
@@ -132,7 +132,7 @@ struct CategoryDetailView: View {
         .padding(.vertical, 24)
         .frame(maxWidth: .infinity)
         .background(
-            glassmorphicCard(cornerRadius: 25)
+            GlassmorphicCard(cornerRadius: 25, cardBackgroundColor: cardBackgroundColor)
         )
     }
     
@@ -140,34 +140,34 @@ struct CategoryDetailView: View {
         VStack(spacing: 12) {
             // Progress bar
             ProgressBar(
-                value: min(viewModel.category.amountSpent / viewModel.category.totalBudget, 1.0),
-                backgroundColor: categoryColor.opacity(0.2),
-                foregroundColor: categoryColor
+                value: viewModel.getProgressValue(),
+                backgroundColor: viewModel.category.name.color.opacity(0.2),
+                foregroundColor: viewModel.category.name.color
             )
             
             // Budget values with percentage
             HStack {
                 // Spent amount
-                Text(formatCurrency(viewModel.category.amountSpent))
+                Text(viewModel.getTotalSpent())
                     .font(.system(.headline, design: .rounded))
                     .foregroundColor(colorScheme == .dark ? .white : .primary)
                 
                 Spacer()
                 
                 // Budget percentage
-                let percentage = Int((viewModel.category.amountSpent / viewModel.category.totalBudget) * 100)
+                let percentage = viewModel.getPercentageProgress()
                 Text("\(percentage)%")
                     .font(.system(.headline, design: .rounded))
                     .foregroundColor(
                         percentage > 90 ? .red : 
                         percentage > 75 ? .orange : 
-                        categoryColor
+                            viewModel.category.name.color
                     )
                 
                 Spacer()
                 
                 // Total budget
-                Text(formatCurrency(viewModel.category.totalBudget))
+                Text(viewModel.getTotalBudget())
                     .font(.system(.headline, design: .rounded))
                     .foregroundColor(colorScheme == .dark ? .white : .primary)
             }
@@ -179,8 +179,8 @@ struct CategoryDetailView: View {
             // Total spent card
             statCard(
                 title: Localization.totalSpent,
-                value: formatCurrency(viewModel.category.amountSpent),
-                icon: "eurosign.circle.fill", 
+                value: viewModel.getTotalSpent(),
+                icon: Localization.Image.totalSpentIcon,
                 iconColor: .green,
                 gradientColors: [Color.green.opacity(0.8), Color.green.opacity(0.4)]
             )
@@ -188,8 +188,8 @@ struct CategoryDetailView: View {
             // Remaining budget card
             statCard(
                 title: Localization.remainingBudget,
-                value: formatCurrency(viewModel.category.totalBudget - viewModel.category.amountSpent),
-                icon: "wallet.pass.fill", 
+                value: viewModel.getRemainingBudget(),
+                icon: Localization.Image.remainingBudgetIcon,
                 iconColor: .orange,
                 gradientColors: [Color.orange.opacity(0.8), Color.orange.opacity(0.4)]
             )
@@ -200,9 +200,9 @@ struct CategoryDetailView: View {
         VStack(alignment: .leading, spacing: 16) {
             // Section title with icon
             HStack {
-                Image(systemName: "list.bullet.rectangle.fill")
+                Image(systemName: Localization.Image.transactionListIcon)
                     .font(.title2)
-                    .foregroundColor(categoryColor)
+                    .foregroundColor(viewModel.category.name.color)
                 
                 Text(Localization.transactions)
                     .font(.title2.bold())
@@ -232,21 +232,21 @@ struct CategoryDetailView: View {
         .padding(.horizontal, 15)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            glassmorphicCard(cornerRadius: 20)
+            GlassmorphicCard(cornerRadius: 20, cardBackgroundColor: cardBackgroundColor)
         )
     }
     
     private var emptyTransactionsView: some View {
         VStack(spacing: 15) {
-            Image(systemName: "tray")
+            Image(systemName: Localization.Image.emptyTransactionIcon)
                 .font(.system(size: 40))
                 .foregroundColor(.secondary)
             
-            Text("No transactions yet")
+            Text(Localization.emptyTransactionsTitle)
                 .font(.headline)
                 .foregroundColor(.secondary)
                 
-            Text("Transactions will appear here")
+            Text(Localization.emptyTransactionsSubtitle)
                 .font(.subheadline)
                 .foregroundColor(.secondary.opacity(0.8))
                 .multilineTextAlignment(.center)
@@ -267,7 +267,7 @@ struct CategoryDetailView: View {
                     VStack(spacing: 15) {
                         ProgressView()
                             .scaleEffect(1.5)
-                            .tint(categoryColor)
+                            .tint(viewModel.category.name.color)
                         
                         Text(Localization.loading)
                             .font(.title3.bold())
@@ -292,7 +292,7 @@ struct CategoryDetailView: View {
                 print("Add transaction tapped")
             }
         }) {
-            Image(systemName: "plus")
+            Image(systemName: Localization.Image.addIcon)
                 .font(.title2.bold())
                 .foregroundColor(.white)
                 .frame(width: 60, height: 60)
@@ -300,13 +300,13 @@ struct CategoryDetailView: View {
                     Circle()
                         .fill(
                             LinearGradient(
-                                colors: [categoryColor, categoryColor.opacity(0.8)],
+                                colors: [viewModel.category.name.color, viewModel.category.name.color.opacity(0.8)],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
                         )
                 )
-                .shadow(color: categoryColor.opacity(0.4), radius: 10, x: 0, y: 5)
+                .shadow(color: viewModel.category.name.color.opacity(0.4), radius: 10, x: 0, y: 5)
         }
         .buttonStyle(BounceButtonStyle())
     }
@@ -318,18 +318,18 @@ struct CategoryDetailView: View {
             }
         }) {
             HStack(spacing: 5) {
-                Image(systemName: "chevron.left")
+                Image(systemName: Localization.Image.backButtonIcon)
                     .font(.title3)
                 
-                Text("Back")
+                Text(Localization.backButtonTitle)
                     .font(.headline)
             }
-            .foregroundColor(categoryColor)
+            .foregroundColor(viewModel.category.name.color)
             .padding(.vertical, 8)
             .padding(.horizontal, 12)
             .background(
                 Capsule()
-                    .fill(categoryColor.opacity(0.15))
+                    .fill(viewModel.category.name.color.opacity(0.15))
             )
         }
         .buttonStyle(BounceButtonStyle())
@@ -371,7 +371,7 @@ struct CategoryDetailView: View {
         .padding(.horizontal, 15)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            glassmorphicCard(cornerRadius: 18)
+            GlassmorphicCard(cornerRadius: 18, cardBackgroundColor: cardBackgroundColor)
         )
     }
     
@@ -393,7 +393,7 @@ struct CategoryDetailView: View {
                     .font(.headline)
                     .foregroundColor(colorScheme == .dark ? .white : .primary)
                 
-                Text(formattedDate)
+                Text(DateManager().getFormattedDate())
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -401,9 +401,9 @@ struct CategoryDetailView: View {
             Spacer()
             
             // Transaction amount
-            Text(formatCurrency(transaction.amount))
+            Text(transaction.amount.formatCurrency())
                 .font(.system(.headline, design: .rounded, weight: .bold))
-                .foregroundColor(colorScheme == .dark ? categoryColor : categoryColor.opacity(0.8))
+                .foregroundColor(colorScheme == .dark ? viewModel.category.name.color : viewModel.category.name.color.opacity(0.8))
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 15)
@@ -416,21 +416,6 @@ struct CategoryDetailView: View {
                         radius: 2, x: 0, y: 1)
         )
         .buttonStyle(BounceButtonStyle())
-    }
-    
-    private func glassmorphicCard(cornerRadius: CGFloat) -> some View {
-        RoundedRectangle(cornerRadius: cornerRadius)
-            .fill(cardBackgroundColor)
-            .background(
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(Material.ultraThinMaterial)
-            )
-            .shadow(
-                color: colorScheme == .dark ? 
-                Color.black.opacity(0.3) : 
-                Color.black.opacity(0.07),
-                radius: 10, x: 0, y: 5
-            )
     }
     
     // MARK: - Helper Methods & Properties
@@ -451,38 +436,6 @@ struct CategoryDetailView: View {
         withAnimation(.spring(response: 0.4, dampingFraction: 0.6).delay(0.7)) {
             floatingButtonScale = 1.0
         }
-    }
-    
-    private var categoryColor: Color {
-        switch viewModel.category.name {
-        case .food:
-            return Color.green
-        case .shopping:
-            return Color.blue
-        case .travel:
-            return Color.purple
-        case .monthly:
-            return Color.orange
-        }
-    }
-    
-    private var categoryIcon: String {
-        switch viewModel.category.name {
-        case .food:
-            return "fork.knife"
-        case .shopping:
-            return "cart.fill"
-        case .travel:
-            return "airplane"
-        case .monthly:
-            return "calendar"
-        }
-    }
-    
-    private var formattedDate: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM d, yyyy"
-        return dateFormatter.string(from: Date())
     }
     
     private func iconForTransaction(_ transaction: Transaction) -> String {
@@ -523,18 +476,8 @@ struct CategoryDetailView: View {
         case let s where s.contains("hotel"):
             return Color.pink
         default:
-            return categoryColor
+            return viewModel.category.name.color
         }
-    }
-    
-    private func formatCurrency(_ amount: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencySymbol = "€" // We can still set Euro symbol but with proper formatting
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        
-        return formatter.string(from: NSNumber(value: amount)) ?? String(format: "€%.2f", amount)
     }
 }
 

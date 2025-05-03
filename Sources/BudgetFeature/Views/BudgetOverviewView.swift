@@ -32,16 +32,6 @@ struct BudgetOverviewView: View {
     private var cardBackgroundColor: Color {
         colorScheme == .dark ? Color(hex: "1E293B").opacity(0.7) : Color.white.opacity(0.85)
     }
-    
-    private func formatCurrency(_ amount: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencySymbol = "€"
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        
-        return formatter.string(from: NSNumber(value: amount)) ?? String(format: "€%.2f", amount)
-    }
 
     var body: some View {
         NavigationStack {
@@ -80,7 +70,7 @@ struct BudgetOverviewView: View {
                                     data: viewModel.categories.map { category in
                                         ChartDataEntry(
                                             value: category.amountSpent,
-                                            label: category.name.rawValue
+                                            label: category.name.title
                                         )
                                     },
                                     title: Localization.pieChartTitle
@@ -160,7 +150,7 @@ struct BudgetOverviewView: View {
                     .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
                 
                 // Current date
-                Text("2 May 2025")
+                Text(DateManager().getFormattedCurrentDate())
                     .font(.system(.subheadline, design: .rounded))
                     .foregroundColor(colorScheme == .dark ? Color(hex: "94A3B8") : Color(hex: "64748B"))
             }
@@ -171,7 +161,7 @@ struct BudgetOverviewView: View {
             Button(action: {
                 // Notification action
             }) {
-                Image(systemName: "bell.fill")
+                Image(systemName: Localization.Image.notificationIcon)
                     .foregroundColor(Color(hex: "3B82F6"))
                     .font(.system(size: 18, weight: .semibold))
                     .frame(width: 38, height: 38)
@@ -199,7 +189,7 @@ struct BudgetOverviewView: View {
         VStack(spacing: 20) {
             // Top section with icon and title
             HStack {
-                Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
+                Image(systemName: Localization.Image.monthlyBudgetIcon)
                     .font(.system(size: 26))
                     .foregroundColor(Color(hex: "3B82F6"))
                     .padding(12)
@@ -246,7 +236,7 @@ struct BudgetOverviewView: View {
                             .font(.system(.subheadline, design: .rounded))
                             .foregroundColor(colorScheme == .dark ? Color(hex: "94A3B8") : Color(hex: "64748B"))
                         
-                        Text(formatCurrency(budget.amountSpent))
+                        Text(budget.amountSpent.formatCurrency())
                             .font(.system(.title2, design: .rounded, weight: .bold))
                             .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
                     }
@@ -258,7 +248,7 @@ struct BudgetOverviewView: View {
                             .font(.system(.subheadline, design: .rounded))
                             .foregroundColor(colorScheme == .dark ? Color(hex: "94A3B8") : Color(hex: "64748B"))
                         
-                        Text(formatCurrency(budget.totalBudget))
+                        Text(budget.totalBudget.formatCurrency())
                             .font(.system(.title2, design: .rounded, weight: .bold))
                             .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
                     }
@@ -288,7 +278,7 @@ struct BudgetOverviewView: View {
                     Spacer()
                     
                     // Remaining budget text
-                    Text("\(formatCurrency(remainingBudget)) remaining")
+                    Text("\(remainingBudget.formatCurrency()) remaining")
                         .font(.system(.caption, design: .rounded, weight: .medium))
                         .foregroundColor(colorScheme == .dark ? Color(hex: "94A3B8") : Color(hex: "64748B"))
                 }
@@ -296,7 +286,7 @@ struct BudgetOverviewView: View {
         }
         .padding(20)
         .background(
-            glassmorphicCard(cornerRadius: 20)
+            GlassmorphicCard(cornerRadius: 20, cardBackgroundColor: cardBackgroundColor)
         )
         .padding(.horizontal, 4)
     }
@@ -315,7 +305,7 @@ struct BudgetOverviewView: View {
                 Button(action: {
                     // Add category action
                 }) {
-                    Label("Add", systemImage: "plus")
+                    Label("Add", systemImage: Localization.Image.addIcon)
                         .font(.system(.subheadline, design: .rounded, weight: .medium))
                         .foregroundColor(Color(hex: "3B82F6"))
                 }
@@ -329,7 +319,7 @@ struct BudgetOverviewView: View {
                     NavigationLink(destination: CategoryDetailView(category: category)) {
                         categoryCard(category)
                             .background(
-                                glassmorphicCard(cornerRadius: 16)
+                                GlassmorphicCard(cornerRadius: 16, cardBackgroundColor: cardBackgroundColor)
                             )
                             .transition(.opacity)
                             .animation(.easeOut.delay(Double(index) * 0.1), value: categoriesAppeared)
@@ -342,23 +332,23 @@ struct BudgetOverviewView: View {
     private func categoryCard(_ category: BudgetCategory) -> some View {
         HStack(spacing: 16) {
             // Category icon
-            Image(systemName: iconForCategory(category))
+            Image(systemName: category.name.icon)
                 .font(.system(size: 20))
                 .foregroundColor(.white)
                 .frame(width: 44, height: 44)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(colorForCategory(category))
+                        .fill(category.name.color)
                 )
-                .shadow(color: colorForCategory(category).opacity(0.3), radius: 5, x: 0, y: 2)
+                .shadow(color: category.name.color.opacity(0.3), radius: 5, x: 0, y: 2)
             
             // Category details
             VStack(alignment: .leading, spacing: 6) {
-                Text(category.name.rawValue)
+                Text(category.name.title)
                     .font(.system(.headline, design: .rounded, weight: .semibold))
                     .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
                 
-                Text("\(formatCurrency(category.amountSpent)) of \(formatCurrency(category.totalBudget))")
+                Text("\(category.amountSpent.formatCurrency()) of \(category.totalBudget.formatCurrency())")
                     .font(.system(.subheadline, design: .rounded))
                     .foregroundColor(colorScheme == .dark ? Color(hex: "94A3B8") : Color(hex: "64748B"))
             }
@@ -374,13 +364,13 @@ struct BudgetOverviewView: View {
                     .foregroundColor(
                         percentage > 90 ? Color.red :
                             percentage > 75 ? Color.orange :
-                            colorForCategory(category)
+                            category.name.color
                     )
                 
                 ProgressBar(
                     value: min(category.amountSpent / category.totalBudget, 1.0),
-                    backgroundColor: colorForCategory(category).opacity(0.2),
-                    foregroundColor: colorForCategory(category)
+                    backgroundColor: category.name.color.opacity(0.2),
+                    foregroundColor: category.name.color
                 )
                 .frame(width: 60, height: 6)
             }
@@ -412,23 +402,6 @@ struct BudgetOverviewView: View {
         }
     }
     
-    // MARK: - Helper Views
-    
-    private func glassmorphicCard(cornerRadius: CGFloat) -> some View {
-        RoundedRectangle(cornerRadius: cornerRadius)
-            .fill(cardBackgroundColor)
-            .background(
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(Material.ultraThinMaterial)
-            )
-            .shadow(
-                color: colorScheme == .dark ?
-                    Color.black.opacity(0.3) :
-                    Color.black.opacity(0.07),
-                radius: 10, x: 0, y: 5
-            )
-    }
-    
     // MARK: - Helper Methods & Properties
     
     @State private var isLoading = false
@@ -453,32 +426,6 @@ struct BudgetOverviewView: View {
         
         withAnimation(.easeOut.delay(0.7)) {
             chartAppeared = true
-        }
-    }
-    
-    private func colorForCategory(_ category: BudgetCategory) -> Color {
-        switch category.name {
-        case .food:
-            return Color(hex: "10B981") // Green
-        case .shopping:
-            return Color(hex: "3B82F6") // Blue
-        case .travel:
-            return Color(hex: "8B5CF6") // Purple
-        case .monthly:
-            return Color(hex: "F59E0B") // Orange
-        }
-    }
-    
-    private func iconForCategory(_ category: BudgetCategory) -> String {
-        switch category.name {
-        case .food:
-            return "fork.knife"
-        case .shopping:
-            return "bag.fill"
-        case .travel:
-            return "airplane"
-        case .monthly:
-            return "calendar"
         }
     }
 }

@@ -13,6 +13,7 @@ import Foundation
 struct Localization {
     // General
     static let loading = "Loading..."
+    static let backButtonTitle = "Back"
 
     // Budget Overview
     static let budgetOverviewTitle = "Budget Overview"
@@ -26,6 +27,8 @@ struct Localization {
     static let totalSpent = "Total spent:"
     static let remainingBudget = "Remaining:"
     static let transactions = "Transactions"
+    static let emptyTransactionsTitle = "No transactions yet"
+    static let emptyTransactionsSubtitle = "Transactions will appear here"
 
     // Transactions
     static let groceryStore = "Grocery Store"
@@ -35,4 +38,28 @@ struct Localization {
     static let electronics = "Electronics"
     static let flightTicket = "Flight Ticket"
     static let hotelBooking = "Hotel Booking"
+    
+    struct Image {
+        static let notificationIcon = "bell.fill"
+        
+        static let addIcon = "plus"
+        static let foodIcon = "fork.knife"
+        static let shoppingIcon = "bag.fill"
+        static let travelIcon = "airplane"
+        static let monthlyIcon = "calendar"
+        
+        static let totalSpentIcon = "eurosign.circle.fill"
+        static let remainingBudgetIcon = "wallet.pass.fill"
+        static let transactionListIcon = "list.bullet.rectangle.fill"
+        static let emptyTransactionIcon = "tray"
+        static let backButtonIcon = "chevron.left"
+        static let monthlyBudgetIcon = "chart.line.uptrend.xyaxis.circle.fill"
+    }
+    
+    struct Categories {
+        static let foodTitle = "Food"
+        static let shoppingTitle = "Shopping"
+        static let travelTitle = "Travel"
+        static let monthlyTitle = "Monthly"
+    }
 }
