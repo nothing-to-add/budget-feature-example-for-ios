@@ -38,39 +38,48 @@ struct CategoryDetailView: View {
     }
     
     var body: some View {
-        ZStack(alignment: .bottom) {
+        ZStack {
             // Fancy gradient background
             backgroundGradient.ignoresSafeArea()
             
-            // Main content
-            ScrollView {
-                VStack(spacing: 25) {
-                    // Fancy header with category name and visualizer
-                    headerView
-                        .padding(.top, 20)
-                        .scaleEffect(headerAppeared ? 1.0 : 0.9)
-                        .opacity(headerAppeared ? 1.0 : 0)
-                    
-                    // Budget stats with glassmorphic cards
-                    budgetStatsView
-                        .offset(y: cardsAppeared ? 0 : 50)
-                        .opacity(cardsAppeared ? 1.0 : 0)
-                    
-                    // Transactions with animated appearance
-                    transactionsView
-                        .offset(y: transactionsAppeared ? 0 : 100)
-                        .opacity(transactionsAppeared ? 1.0 : 0)
-                    
-                    Spacer(minLength: 90) // Space for floating button
+            if viewModel.isLoading {
+                loadingView
+            } else {
+                
+                // Main content
+                ScrollView {
+                    VStack(spacing: 25) {
+                        // Fancy header with category name and visualizer
+                        headerView
+                            .padding(.top, 20)
+                            .scaleEffect(headerAppeared ? 1.0 : 0.9)
+                            .opacity(headerAppeared ? 1.0 : 0)
+                        
+                        // Budget stats with glassmorphic cards
+                        budgetStatsView
+                            .offset(y: cardsAppeared ? 0 : 50)
+                            .opacity(cardsAppeared ? 1.0 : 0)
+                        
+                        // Transactions with animated appearance
+                        transactionsView
+                            .offset(y: transactionsAppeared ? 0 : 100)
+                            .opacity(transactionsAppeared ? 1.0 : 0)
+                        
+                        Spacer(minLength: 90) // Space for floating button
+                    }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
+//                .overlay(loadingOverlay)
+                
+                // Floating action button
+                VStack {
+                    Spacer()
+                    
+                    floatingActionButton
+                        .scaleEffect(floatingButtonScale)
+                        .padding(.bottom, 20)
+                }
             }
-            .overlay(loadingOverlay)
-            
-            // Floating action button
-            floatingActionButton
-                .scaleEffect(floatingButtonScale)
-                .padding(.bottom, 20)
         }
         .onAppear {
             viewModel.loadTransactions()
@@ -82,6 +91,35 @@ struct CategoryDetailView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 backButton
             }
+        }
+    }
+    
+    private var loadingView: some View {
+        VStack(spacing: 20) {
+            // Shimmer effect placeholder or spinner
+            Circle()
+                .trim(from: 0, to: 0.7)
+                .stroke(
+                    AngularGradient(
+                        gradient: Gradient(colors: [viewModel.category.name.color.opacity(0.2), viewModel.category.name.color]),
+                        center: .center
+                    ),
+                    style: StrokeStyle(lineWidth: 8, lineCap: .round)
+                )
+                .frame(width: 60, height: 60)
+                .rotationEffect(Angle.degrees(viewModel.isSpinning ? 360 : 0))
+                .animation(
+                    Animation.linear(duration: 1)
+                        .repeatForever(autoreverses: false),
+                    value: viewModel.isSpinning
+                )
+                .onAppear {
+                    viewModel.isSpinning = true
+                }
+            
+            Text(Localization.loading)
+                .font(.system(.title3, design: .rounded, weight: .medium))
+                .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
         }
     }
     
@@ -253,36 +291,6 @@ struct CategoryDetailView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 40)
-    }
-    
-    private var loadingOverlay: some View {
-        Group {
-            if viewModel.isLoading {
-                ZStack {
-                    Rectangle()
-                        .fill(Color.black.opacity(0.2))
-                        .ignoresSafeArea()
-                        .blur(radius: 2)
-                    
-                    VStack(spacing: 15) {
-                        ProgressView()
-                            .scaleEffect(1.5)
-                            .tint(viewModel.category.name.color)
-                        
-                        Text(Localization.loading)
-                            .font(.title3.bold())
-                            .foregroundColor(.white)
-                    }
-                    .padding(30)
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(Color.black.opacity(0.7))
-                            .background(.ultraThinMaterial)
-                    )
-                }
-                .transition(.opacity)
-            }
-        }
     }
     
     private var floatingActionButton: some View {

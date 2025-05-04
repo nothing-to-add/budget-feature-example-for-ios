@@ -104,7 +104,7 @@ struct BudgetOverviewView: View {
                     Button(action: {
                         // Settings action
                     }) {
-                        Image(systemName: "gear")
+                        Image(systemName: Localization.Image.settingIcon)
                             .foregroundColor(Color(hex: "3B82F6"))
                             .font(.system(size: 18, weight: .semibold))
                             .frame(width: 38, height: 38)
@@ -150,7 +150,7 @@ struct BudgetOverviewView: View {
                     .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
                 
                 // Current date
-                Text(DateManager().getFormattedCurrentDate())
+                Text(viewModel.getCurrentDate())
                     .font(.system(.subheadline, design: .rounded))
                     .foregroundColor(colorScheme == .dark ? Color(hex: "94A3B8") : Color(hex: "64748B"))
             }
@@ -392,9 +392,15 @@ struct BudgetOverviewView: View {
                     style: StrokeStyle(lineWidth: 8, lineCap: .round)
                 )
                 .frame(width: 60, height: 60)
-                .rotationEffect(.degrees(isLoading ? 360 : 0))
-                .animation(.linear(duration: 1).repeatForever(autoreverses: false), value: isLoading)
-                .onAppear { isLoading = true }
+                .rotationEffect(Angle.degrees(viewModel.isSpinning ? 360 : 0))
+                .animation(
+                    Animation.linear(duration: 1)
+                        .repeatForever(autoreverses: false),
+                    value: viewModel.isSpinning
+                )
+                .onAppear {
+                    viewModel.loadingIsAppearing()
+                }
             
             Text(Localization.loading)
                 .font(.system(.title3, design: .rounded, weight: .medium))
@@ -403,8 +409,6 @@ struct BudgetOverviewView: View {
     }
     
     // MARK: - Helper Methods & Properties
-    
-    @State private var isLoading = false
     
     private func animateViewsIn() {
         // Staggered animations for a smooth reveal effect

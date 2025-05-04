@@ -4,6 +4,7 @@ import Foundation
 class CategoryDetailViewModel: ObservableObject {
     @Published var transactions: [Transaction] = []
     @Published var isLoading = true
+    @Published var isSpinning = false
     let category: BudgetCategory
 
     private let budgetService = BudgetService.shared
@@ -17,6 +18,7 @@ class CategoryDetailViewModel: ObservableObject {
             isLoading = true
             transactions = await budgetService.fetchTransactions(for: category.name)
             isLoading = false
+            isSpinning = false
         }
     }
     

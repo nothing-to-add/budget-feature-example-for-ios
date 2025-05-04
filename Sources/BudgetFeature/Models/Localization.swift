@@ -41,6 +41,7 @@ struct Localization {
     
     struct Image {
         static let notificationIcon = "bell.fill"
+        static let settingIcon = "gear"
         
         static let addIcon = "plus"
         static let foodIcon = "fork.knife"
