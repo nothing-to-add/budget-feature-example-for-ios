@@ -28,4 +28,29 @@ class BudgetOverviewViewModel: ObservableObject {
     func getCurrentDate() -> String {
         DateManager().getFormattedCurrentDate()
     }
+    
+    func getRemainingBudget() -> String {
+        guard let monthlyBudget else { return "0.00" }
+        return (monthlyBudget.totalBudget - monthlyBudget.amountSpent).formatCurrency()
+    }
+    
+    func getPercentageValue() -> Int {
+        guard let monthlyBudget else { return 0 }
+        return Int((monthlyBudget.amountSpent / monthlyBudget.totalBudget) * 100)
+    }
+    
+    func getSpentAmount() -> String {
+        guard let monthlyBudget else { return "0.00" }
+        return monthlyBudget.amountSpent.formatCurrency()
+    }
+    
+    func getProgressValue() -> Double {
+        guard let monthlyBudget else { return 0.0 }
+        return min(monthlyBudget.amountSpent / monthlyBudget.totalBudget, 1.0)
+    }
+    
+    func getTotalBudget() -> String {
+        guard let monthlyBudget else { return "0.00" }
+        return monthlyBudget.totalBudget.formatCurrency()
+    }
 }

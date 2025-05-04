@@ -42,7 +42,7 @@ struct BudgetOverviewView: View {
                 
                 // Main content
                 if viewModel.isLoading {
-                    loadingView
+                    LoadingView(spinnerColor: Color(hex: "3B82F6"), textColor: colorScheme == .dark ? .white : Color(hex: "334155"), isSpinning: viewModel.isSpinning, onAppearAction: viewModel.loadingIsAppearing)
                 } else {
                     ScrollView {
                         VStack(spacing: 24) {
@@ -52,8 +52,8 @@ struct BudgetOverviewView: View {
                                 .opacity(headerAppeared ? 1.0 : 0)
                             
                             // Monthly budget card with animation
-                            if let budget = viewModel.monthlyBudget {
-                                monthlyBudgetCard(budget)
+                            if viewModel.monthlyBudget != nil {
+                                monthlyBudgetCard()
                                     .transition(.scale.combined(with: .opacity))
                                     .offset(y: budgetCardAppeared ? 0 : 30)
                                     .opacity(budgetCardAppeared ? 1.0 : 0)
@@ -185,7 +185,7 @@ struct BudgetOverviewView: View {
         .padding(.vertical, 12)
     }
     
-    private func monthlyBudgetCard(_ budget: BudgetCategory) -> some View {
+    private func monthlyBudgetCard() -> some View {
         VStack(spacing: 20) {
             // Top section with icon and title
             HStack {
@@ -236,7 +236,7 @@ struct BudgetOverviewView: View {
                             .font(.system(.subheadline, design: .rounded))
                             .foregroundColor(colorScheme == .dark ? Color(hex: "94A3B8") : Color(hex: "64748B"))
                         
-                        Text(budget.amountSpent.formatCurrency())
+                        Text(viewModel.getSpentAmount())
                             .font(.system(.title2, design: .rounded, weight: .bold))
                             .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
                     }
@@ -248,7 +248,7 @@ struct BudgetOverviewView: View {
                             .font(.system(.subheadline, design: .rounded))
                             .foregroundColor(colorScheme == .dark ? Color(hex: "94A3B8") : Color(hex: "64748B"))
                         
-                        Text(budget.totalBudget.formatCurrency())
+                        Text(viewModel.getTotalBudget())
                             .font(.system(.title2, design: .rounded, weight: .bold))
                             .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
                     }
@@ -256,29 +256,26 @@ struct BudgetOverviewView: View {
                 
                 // Progress bar
                 ProgressBar(
-                    value: min(budget.amountSpent / budget.totalBudget, 1.0),
+                    value: viewModel.getProgressValue(),
                     backgroundColor: Color(hex: "3B82F6").opacity(0.2),
                     foregroundColor: Color(hex: "3B82F6")
                 )
                 
                 // Progress info
                 HStack {
-                    let percentage = Int((budget.amountSpent / budget.totalBudget) * 100)
-                    let remainingBudget = budget.totalBudget - budget.amountSpent
-                    
                     // Percentage text
-                    Text("\(percentage)% used")
+                    Text("\(viewModel.getPercentageValue())% used")
                         .font(.system(.caption, design: .rounded, weight: .medium))
                         .foregroundColor(
-                            percentage > 90 ? Color.red :
-                                percentage > 75 ? Color.orange :
+                            viewModel.getPercentageValue() > 90 ? Color.red :
+                                viewModel.getPercentageValue() > 75 ? Color.orange :
                                 Color(hex: "3B82F6")
                         )
                     
                     Spacer()
                     
                     // Remaining budget text
-                    Text("\(remainingBudget.formatCurrency()) remaining")
+                    Text("\(viewModel.getRemainingBudget()) remaining")
                         .font(.system(.caption, design: .rounded, weight: .medium))
                         .foregroundColor(colorScheme == .dark ? Color(hex: "94A3B8") : Color(hex: "64748B"))
                 }
@@ -377,35 +374,6 @@ struct BudgetOverviewView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-    }
-    
-    private var loadingView: some View {
-        VStack(spacing: 20) {
-            // Shimmer effect placeholder or spinner
-            Circle()
-                .trim(from: 0, to: 0.7)
-                .stroke(
-                    AngularGradient(
-                        gradient: Gradient(colors: [Color(hex: "3B82F6").opacity(0.2), Color(hex: "3B82F6")]),
-                        center: .center
-                    ),
-                    style: StrokeStyle(lineWidth: 8, lineCap: .round)
-                )
-                .frame(width: 60, height: 60)
-                .rotationEffect(Angle.degrees(viewModel.isSpinning ? 360 : 0))
-                .animation(
-                    Animation.linear(duration: 1)
-                        .repeatForever(autoreverses: false),
-                    value: viewModel.isSpinning
-                )
-                .onAppear {
-                    viewModel.loadingIsAppearing()
-                }
-            
-            Text(Localization.loading)
-                .font(.system(.title3, design: .rounded, weight: .medium))
-                .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
-        }
     }
     
     // MARK: - Helper Methods & Properties

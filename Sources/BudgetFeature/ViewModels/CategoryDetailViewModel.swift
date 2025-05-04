@@ -22,6 +22,10 @@ class CategoryDetailViewModel: ObservableObject {
         }
     }
     
+    func isAppearing() {
+        isSpinning = true
+    }
+    
     func getProgressValue() -> Double {
         min(category.amountSpent / category.totalBudget, 1.0)
     }

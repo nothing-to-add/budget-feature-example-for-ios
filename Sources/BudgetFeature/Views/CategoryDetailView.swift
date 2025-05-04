@@ -43,7 +43,7 @@ struct CategoryDetailView: View {
             backgroundGradient.ignoresSafeArea()
             
             if viewModel.isLoading {
-                loadingView
+                LoadingView(spinnerColor: viewModel.category.name.color, textColor: colorScheme == .dark ? .white : Color(hex: "334155"), isSpinning: viewModel.isSpinning, onAppearAction: viewModel.isAppearing)
             } else {
                 
                 // Main content
@@ -91,35 +91,6 @@ struct CategoryDetailView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 backButton
             }
-        }
-    }
-    
-    private var loadingView: some View {
-        VStack(spacing: 20) {
-            // Shimmer effect placeholder or spinner
-            Circle()
-                .trim(from: 0, to: 0.7)
-                .stroke(
-                    AngularGradient(
-                        gradient: Gradient(colors: [viewModel.category.name.color.opacity(0.2), viewModel.category.name.color]),
-                        center: .center
-                    ),
-                    style: StrokeStyle(lineWidth: 8, lineCap: .round)
-                )
-                .frame(width: 60, height: 60)
-                .rotationEffect(Angle.degrees(viewModel.isSpinning ? 360 : 0))
-                .animation(
-                    Animation.linear(duration: 1)
-                        .repeatForever(autoreverses: false),
-                    value: viewModel.isSpinning
-                )
-                .onAppear {
-                    viewModel.isSpinning = true
-                }
-            
-            Text(Localization.loading)
-                .font(.system(.title3, design: .rounded, weight: .medium))
-                .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
         }
     }
     
