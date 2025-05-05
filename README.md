@@ -21,7 +21,7 @@ This repository demonstrates a modular **Budget Feature** implemented as a **Swi
 
 ## 🗂 Project Structure
 
-'''
+```
 BudgetFeaturePackage/
 │
 ├── Elements/ # Reusable UI components (e.g. ProgressBarView, custom styles)
@@ -34,7 +34,7 @@ BudgetFeaturePackage/
 ├── ViewModels/ # Logic and data binding for each view
 ├── Views/ # SwiftUI view files
 └── Tests/ # Unit tests for ViewModels
-'''
+```
 
 ---
 
