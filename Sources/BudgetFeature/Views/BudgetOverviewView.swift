@@ -14,6 +14,7 @@ import SwiftUI
 struct BudgetOverviewView: View {
     @StateObject private var viewModel = BudgetOverviewViewModel()
     @Environment(\.colorScheme) private var colorScheme
+    @EnvironmentObject private var router: BudgetRouter
     
     // Animation states
     @State private var headerAppeared = false
@@ -26,87 +27,85 @@ struct BudgetOverviewView: View {
     private var backgroundGradient: LinearGradient = .monthlyBackground
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                // Elegant gradient background
-                backgroundGradient
-                    .ignoresSafeArea()
-                
-                // Main content
-                if viewModel.isLoading {
-                    LoadingView(spinnerColor: .monthlyCategory, textColor: .textMain, isSpinning: viewModel.isSpinning, onAppearAction: viewModel.loadingIsAppearing)
-                } else {
-                    ScrollView {
-                        VStack(spacing: Constants.Spacing.extraLarge) {
-                            // Header with title and avatar
-                            headerView
-                                .scaleEffect(headerAppeared ? 1.0 : 0.9)
-                                .opacity(headerAppeared ? 1.0 : 0)
-                            
-                            // Monthly budget card with animation
-                            if viewModel.monthlyBudget != nil {
-                                monthlyBudgetCard()
-                                    .transition(.scale.combined(with: .opacity))
-                                    .offset(y: budgetCardAppeared ? 0 : 30)
-                                    .opacity(budgetCardAppeared ? 1.0 : 0)
-                            }
-                            
-                            // Categories section with staggered animation
-                            categoriesSection
-                                .offset(y: categoriesAppeared ? 0 : 50)
-                                .opacity(categoriesAppeared ? 1.0 : 0)
-                            
-                            // Pie chart with reveal animation
-                            if !viewModel.categories.isEmpty {
-                                PieChartView(
-                                    data: viewModel.categories.map { category in
-                                        ChartDataEntry(
-                                            value: category.amountSpent,
-                                            label: category.name.title
-                                        )
-                                    },
-                                    title: Localization.pieChartTitle
-                                )
-                                .frame(maxWidth: .infinity)
-                                .scaleEffect(chartAppeared ? 1.0 : 0.8)
-                                .opacity(chartAppeared ? 1.0 : 0)
-                            }
-                            
-                            // Add some space at the bottom for better scrolling experience
-                            Spacer().frame(height: 20)
+        ZStack {
+            // Elegant gradient background
+            backgroundGradient
+                .ignoresSafeArea()
+            
+            // Main content
+            if viewModel.isLoading {
+                LoadingView(spinnerColor: .monthlyCategory, textColor: .textMain, isSpinning: viewModel.isSpinning, onAppearAction: viewModel.loadingIsAppearing)
+            } else {
+                ScrollView {
+                    VStack(spacing: Constants.Spacing.extraLarge) {
+                        // Header with title and avatar
+                        headerView
+                            .scaleEffect(headerAppeared ? 1.0 : 0.9)
+                            .opacity(headerAppeared ? 1.0 : 0)
+                        
+                        // Monthly budget card with animation
+                        if viewModel.monthlyBudget != nil {
+                            monthlyBudgetCard()
+                                .transition(.scale.combined(with: .opacity))
+                                .offset(y: budgetCardAppeared ? 0 : 30)
+                                .opacity(budgetCardAppeared ? 1.0 : 0)
                         }
-                        .padding(.horizontal)
-                    }
-                }
-            }
-            .onAppear {
-                viewModel.loadBudgetData()
-                animateViewsIn()
-            }
-            .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text(Localization.budgetOverviewTitle)
-                        .font(.system(.headline, design: .rounded, weight: .bold))
-                        .foregroundColor(.textMain)
-                }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        // Settings action
-                    }) {
-                        Image(systemName: Localization.Image.settingIcon)
-                            .foregroundColor(.monthlyCategory)
-                            .font(.system(size: 18, weight: .semibold))
-                            .frame(width: 38, height: 38)
-                            .background(
-                                Circle()
-                                    .fill(Color.monthlyCircle)
+                        
+                        // Categories section with staggered animation
+                        categoriesSection
+                            .offset(y: categoriesAppeared ? 0 : 50)
+                            .opacity(categoriesAppeared ? 1.0 : 0)
+                        
+                        // Pie chart with reveal animation
+                        if !viewModel.categories.isEmpty {
+                            PieChartView(
+                                data: viewModel.categories.map { category in
+                                    ChartDataEntry(
+                                        value: category.amountSpent,
+                                        label: category.name.title
+                                    )
+                                },
+                                title: Localization.pieChartTitle
                             )
+                            .scaleEffect(chartAppeared ? 1.0 : 0.8)
+                            .opacity(chartAppeared ? 1.0 : 0)
+                        }
+                        
+                        // Add some space at the bottom for better scrolling experience
+                        Spacer().frame(height: 20)
                     }
-                    .buttonStyle(BounceButtonStyle())
+                    .padding(.horizontal)
                 }
+            }
+        }
+        .onAppear {
+            viewModel.loadBudgetData()
+            animateViewsIn()
+        }
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text(Localization.budgetOverviewTitle)
+                    .font(.system(.headline, design: .rounded, weight: .bold))
+                    .foregroundColor(.textMain)
+            }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    // Navigate to settings
+                    router.navigate(to: .settings)
+                }) {
+                    Image(systemName: Localization.Image.settingIcon)
+                        .foregroundColor(.monthlyCategory)
+                        .font(.system(size: 18, weight: .semibold))
+                        .frame(width: 38, height: 38)
+                        .background(
+                            Circle()
+                                .fill(Color.monthlyCircle)
+                        )
+                }
+                .buttonStyle(BounceButtonStyle())
             }
         }
     }
@@ -149,7 +148,8 @@ struct BudgetOverviewView: View {
             
             // Notification bell
             Button(action: {
-                // Notification action
+                // Navigate to notifications
+                router.navigate(to: .notifications)
             }) {
                 Image(systemName: Localization.Image.notificationIcon)
                     .foregroundColor(.monthlyCategory)
@@ -288,7 +288,8 @@ struct BudgetOverviewView: View {
                 
                 // Add category button
                 Button(action: {
-                    // Add category action
+                    // Navigate to add category
+                    router.navigate(to: .addCategory)
                 }) {
                     Label(Localization.addButtonTitle, systemImage: Localization.Image.addIcon)
                         .font(.system(.subheadline, design: .rounded, weight: .medium))
@@ -301,7 +302,10 @@ struct BudgetOverviewView: View {
             // Categories list
             VStack(spacing: Constants.Spacing.medium) {
                 ForEach(Array(viewModel.categories.enumerated()), id: \.element.name) { index, category in
-                    NavigationLink(destination: CategoryDetailView(category: category)) {
+                    Button(action: {
+                        // Navigate to category detail
+                        router.navigate(to: .categoryDetail(category: category))
+                    }) {
                         categoryCard(category)
                             .background(
                                 GlassmorphicCard(cornerRadius: 16, cardBackgroundColor: .cardBackgroundColor)
@@ -309,6 +313,7 @@ struct BudgetOverviewView: View {
                             .transition(.opacity)
                             .animation(.easeOut.delay(Double(index) * 0.1), value: categoriesAppeared)
                     }
+                    .buttonStyle(PlainButtonStyle())
                 }
             }
         }
@@ -392,4 +397,5 @@ struct BudgetOverviewView: View {
 
 #Preview {
     BudgetOverviewView()
+        .environmentObject(BudgetRouter())
 }

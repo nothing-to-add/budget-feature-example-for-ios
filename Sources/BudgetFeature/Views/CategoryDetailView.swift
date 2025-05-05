@@ -13,7 +13,7 @@ import SwiftUI
 // Category Detail View
 struct CategoryDetailView: View {
     @StateObject private var viewModel: CategoryDetailViewModel
-    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var router: BudgetRouter
     @Environment(\.colorScheme) private var colorScheme
     
     // Animation states
@@ -288,7 +288,7 @@ struct CategoryDetailView: View {
     private var backButton: some View {
         Button(action: {
             withAnimation(.easeInOut(duration: 0.2)) {
-                dismiss()
+                router.goBack()
             }
         }) {
             HStack(spacing: Constants.Spacing.small) {
@@ -457,4 +457,5 @@ struct CategoryDetailView: View {
 
 #Preview {
     CategoryDetailView(category: BudgetCategory(name: .food, amountSpent: 300, totalBudget: 400))
+        .environmentObject(BudgetRouter())
 }
