@@ -10,6 +10,7 @@
 
 import Foundation
 
+/// Data model for Budget categories
 struct BudgetCategory {
     let name: BudgetCategories
     let amountSpent: Double

@@ -43,15 +43,18 @@ struct Localization {
     static let hotelBooking = "Hotel Booking"
     
     struct Image {
+        // General
         static let notificationIcon = "bell.fill"
         static let settingIcon = "gear"
         
+        // Budget Overview
         static let addIcon = "plus"
         static let foodIcon = "fork.knife"
         static let shoppingIcon = "bag.fill"
         static let travelIcon = "airplane"
         static let monthlyIcon = "calendar"
         
+        // Category Detail
         static let totalSpentIcon = "eurosign.circle.fill"
         static let remainingBudgetIcon = "wallet.pass.fill"
         static let transactionListIcon = "list.bullet.rectangle.fill"
@@ -60,6 +63,7 @@ struct Localization {
         static let monthlyBudgetIcon = "chart.line.uptrend.xyaxis.circle.fill"
     }
     
+    // Text
     struct Categories {
         static let foodTitle = "Food"
         static let shoppingTitle = "Shopping"

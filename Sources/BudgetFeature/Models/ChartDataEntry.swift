@@ -11,6 +11,7 @@
 import Foundation
 import SwiftUI
 
+/// Data model for chart
 struct ChartDataEntry: Identifiable {
     let id = UUID()
     let value: Double

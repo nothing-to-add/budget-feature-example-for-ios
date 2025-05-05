@@ -11,6 +11,7 @@
 import Foundation
 import SwiftUI
 
+/// Model and Data for Budget Categories
 enum BudgetCategories: String {
     case food
     case shopping

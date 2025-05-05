@@ -10,6 +10,7 @@
 
 import Foundation
 
+/// Data model for Transactions
 struct Transaction {
     let description: String
     let amount: Double
