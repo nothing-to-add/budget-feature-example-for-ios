@@ -47,7 +47,7 @@ struct CategoryDetailView: View {
                     VStack(spacing: Constants.Spacing.extraLarge) {
                         // Fancy header with category name and visualizer
                         headerView
-                            .padding(.top, 20)
+                            .padding(.top, Constants.Padding.heavy)
                             .scaleEffect(headerAppeared ? 1.0 : 0.9)
                             .opacity(headerAppeared ? 1.0 : 0)
                         
@@ -72,7 +72,7 @@ struct CategoryDetailView: View {
                     
                     floatingActionButton
                         .scaleEffect(floatingButtonScale)
-                        .padding(.bottom, 20)
+                        .padding(.bottom, Constants.Padding.heavy)
                 }
             }
         }
@@ -114,7 +114,7 @@ struct CategoryDetailView: View {
                     .font(.system(size: 40))
                     .foregroundColor(.white)
             }
-            .padding(.bottom, 8)
+            .padding(.bottom, Constants.Padding.small)
             
             // Category name with stylish typography
             Text(viewModel.category.name.title)
@@ -130,10 +130,10 @@ struct CategoryDetailView: View {
             
             // Budget progress indicator
             budgetProgressView
-                .padding(.top, 5)
-                .padding(.horizontal, 20)
+                .padding(.top, Constants.Padding.extraSmall)
+                .padding(.horizontal, Constants.Padding.heavy)
         }
-        .padding(.vertical, 24)
+        .padding(.vertical, Constants.Padding.heavy)
         .frame(maxWidth: .infinity)
         .background(
             GlassmorphicCard(cornerRadius: 25, cardBackgroundColor: .cardBackgroundColor)
@@ -212,8 +212,8 @@ struct CategoryDetailView: View {
                     .font(.title2.bold())
                     .foregroundColor(colorScheme == .dark ? .white : .primary)
             }
-            .padding(.horizontal, 5)
-            .padding(.bottom, 8)
+            .padding(.horizontal, Constants.Padding.extraSmall)
+            .padding(.bottom, Constants.Padding.small)
             
             if viewModel.transactions.isEmpty {
                 // Empty state display
@@ -232,8 +232,8 @@ struct CategoryDetailView: View {
                 }
             }
         }
-        .padding(.vertical, 20)
-        .padding(.horizontal, 15)
+        .padding(.vertical, Constants.Padding.heavy)
+        .padding(.horizontal, Constants.Padding.large)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             GlassmorphicCard(cornerRadius: 20, cardBackgroundColor: .cardBackgroundColor)
@@ -256,7 +256,7 @@ struct CategoryDetailView: View {
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 40)
+        .padding(.vertical, Constants.Padding.extraLarge)
     }
     
     private var floatingActionButton: some View {
@@ -299,8 +299,8 @@ struct CategoryDetailView: View {
                     .font(.headline)
             }
             .foregroundColor(viewModel.category.name.color)
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
+            .padding(.vertical, Constants.Padding.small)
+            .padding(.horizontal, Constants.Padding.medium)
             .background(
                 Capsule()
                     .fill(viewModel.category.name.color.opacity(0.15))
@@ -317,7 +317,7 @@ struct CategoryDetailView: View {
             Image(systemName: icon)
                 .font(.title)
                 .foregroundColor(.white)
-                .padding(12)
+                .padding(Constants.Padding.medium)
                 .background(
                     Circle()
                         .fill(
@@ -341,8 +341,8 @@ struct CategoryDetailView: View {
                     .foregroundColor(colorScheme == .dark ? .white : .primary)
             }
         }
-        .padding(.vertical, 20)
-        .padding(.horizontal, 15)
+        .padding(.vertical, Constants.Padding.heavy)
+        .padding(.horizontal, Constants.Padding.large)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             GlassmorphicCard(cornerRadius: 18, cardBackgroundColor: .cardBackgroundColor)
@@ -379,8 +379,8 @@ struct CategoryDetailView: View {
                 .font(.system(.headline, design: .rounded, weight: .bold))
                 .foregroundColor(colorScheme == .dark ? viewModel.category.name.color : viewModel.category.name.color.opacity(0.8))
         }
-        .padding(.vertical, 12)
-        .padding(.horizontal, 15)
+        .padding(.vertical, Constants.Padding.medium)
+        .padding(.horizontal, Constants.Padding.large)
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(colorScheme == .dark ? 

@@ -169,8 +169,8 @@ struct BudgetOverviewView: View {
             }
             .buttonStyle(BounceButtonStyle())
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 12)
+        .padding(.horizontal, Constants.Padding.small)
+        .padding(.vertical, Constants.Padding.medium)
     }
     
     private func monthlyBudgetCard() -> some View {
@@ -180,7 +180,7 @@ struct BudgetOverviewView: View {
                 Image(systemName: Localization.Image.monthlyBudgetIcon)
                     .font(.system(size: 26))
                     .foregroundColor(.monthlyCategory)
-                    .padding(12)
+                    .padding(Constants.Padding.medium)
                     .background(
                         Circle()
                             .fill(Color.monthlyCategory.opacity(0.15))
@@ -196,8 +196,8 @@ struct BudgetOverviewView: View {
                 Text("May")
                     .font(.system(.subheadline, design: .rounded, weight: .medium))
                     .foregroundColor(.white)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 6)
+                    .padding(.horizontal, Constants.Padding.large)
+                    .padding(.vertical, Constants.Padding.extraSmall)
                     .background(
                         Capsule()
                             .fill(
@@ -219,7 +219,7 @@ struct BudgetOverviewView: View {
             VStack(spacing: Constants.Spacing.medium) {
                 // Budget spent info
                 HStack {
-                    VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: Constants.Spacing.small) {
                         Text(Localization.cardSpentTitle)
                             .font(.system(.subheadline, design: .rounded))
                             .foregroundColor(.textSecondary)
@@ -231,7 +231,7 @@ struct BudgetOverviewView: View {
                     
                     Spacer()
                     
-                    VStack(alignment: .trailing, spacing: 4) {
+                    VStack(alignment: .trailing, spacing: Constants.Spacing.small) {
                         Text(Localization.cardBudgetTitle)
                             .font(.system(.subheadline, design: .rounded))
                             .foregroundColor(.textSecondary)
@@ -269,11 +269,11 @@ struct BudgetOverviewView: View {
                 }
             }
         }
-        .padding(20)
+        .padding(Constants.Padding.heavy)
         .background(
             GlassmorphicCard(cornerRadius: 20, cardBackgroundColor: .cardBackgroundColor)
         )
-        .padding(.horizontal, 4)
+        .padding(.horizontal, Constants.Padding.extraSmall)
     }
     
     private var categoriesSection: some View {
@@ -296,7 +296,7 @@ struct BudgetOverviewView: View {
                 }
                 .buttonStyle(BounceButtonStyle())
             }
-            .padding(.horizontal, 4)
+            .padding(.horizontal, Constants.Padding.extraSmall)
             
             // Categories list
             VStack(spacing: Constants.Spacing.medium) {
@@ -360,8 +360,8 @@ struct BudgetOverviewView: View {
                 .frame(width: 60, height: 6)
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 14)
+        .padding(.horizontal, Constants.Padding.large)
+        .padding(.vertical, Constants.Padding.large)
     }
     
     // MARK: - Helper Methods & Properties

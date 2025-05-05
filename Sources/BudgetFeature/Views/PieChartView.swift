@@ -27,7 +27,7 @@ struct PieChartView: View {
     }
     
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: Constants.Spacing.large) {
             chartTitle
             
             pieChart
@@ -52,7 +52,7 @@ struct PieChartView: View {
         Text(title)
             .font(.title2.bold())
             .foregroundStyle(titleColor)
-            .padding(.bottom, 8)
+            .padding(.bottom, Constants.Padding.small)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
     
@@ -79,9 +79,9 @@ struct PieChartView: View {
     }
     
     private var pieLegend: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: Constants.Spacing.medium) {
             LazyVGrid(columns: [
-                GridItem(.adaptive(minimum: 150, maximum: 200), spacing: 16)
+                GridItem(.adaptive(minimum: 150, maximum: 200), spacing: Constants.Spacing.large)
             ], spacing: 0) {
                 ForEach(data) { entry in
                     HStack(spacing: 8) {
@@ -96,8 +96,8 @@ struct PieChartView: View {
                             .minimumScaleFactor(0.8)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 12)
+                    .padding(.vertical, Constants.Padding.small)
+                    .padding(.horizontal, Constants.Padding.medium)
                     .background(
                         RoundedRectangle(cornerRadius: 8)
                             .fill(Color(UIColor.systemBackground).opacity(0.6))
@@ -105,7 +105,7 @@ struct PieChartView: View {
                 }
             }
         }
-        .padding(.horizontal, 8)
+        .padding(.horizontal, Constants.Padding.small)
     }
 }
 

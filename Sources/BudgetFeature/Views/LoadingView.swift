@@ -18,7 +18,7 @@ struct LoadingView: View {
     var onAppearAction: (() -> Void)?
     
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: Constants.Spacing.heavy) {
             // Shimmer effect placeholder or spinner
             Circle()
                 .trim(from: 0, to: 0.7)
