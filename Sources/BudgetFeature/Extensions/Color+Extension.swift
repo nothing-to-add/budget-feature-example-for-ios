@@ -40,8 +40,25 @@ extension Color {
 
 extension Color {
     
+    static var isDarkMode : Bool {
+        UITraitCollection.current.userInterfaceStyle == .dark
+    }
+    
+    static let darkNavy: Color = .init(hex: "334155") //Dark Navy
+    static let lightOrange: Color = .init(hex: "C87721") //Light Orange instead of 60A5FA
+    
     static let foodCategory: Color = .init(hex: "10B981") // Green
     static let shoppingCategory: Color = .init(hex: "3B82F6") // Blue
     static let travelCategory: Color = .init(hex: "8B5CF6") // Purple
     static let monthlyCategory: Color = .init(hex: "F59E0B") // Orange
+    
+    static let cardBackgroundColor: Color = isDarkMode ? Color(hex: "272741").opacity(0.7) : Color.white.opacity(0.85)
+    static let monthlyBackgroundLight: Color = isDarkMode ? Color(hex: "572e01") : Color(hex: "fae2c8") //Light Orange
+    static let monthlyBackgroundDark: Color = isDarkMode ? Color(hex: "6b3901") : Color(hex: "face9d") //Darker Orange
+    
+    static let textMain: Color = isDarkMode ? .white : .darkNavy //Dark Navy
+    static let textSecondary: Color = isDarkMode ? Color(hex: "94A3B8") : Color(hex: "64748B") //Light Navy Gray and Dark Navy Gray
+    
+    static let monthlyCircle: Color = isDarkMode ? .darkNavy.opacity(0.5) : Color(hex: "EFF6FF")
+    
 }

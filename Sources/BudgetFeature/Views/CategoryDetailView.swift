@@ -33,17 +33,13 @@ struct CategoryDetailView: View {
             LinearGradient(colors: [Color(hex: "F9FAFB"), Color(hex: "EEF2FF")], startPoint: .top, endPoint: .bottom)
     }
     
-    private var cardBackgroundColor: Color {
-        colorScheme == .dark ? Color(hex: "272741").opacity(0.7) : Color.white.opacity(0.85)
-    }
-    
     var body: some View {
         ZStack {
             // Fancy gradient background
             backgroundGradient.ignoresSafeArea()
             
             if viewModel.isLoading {
-                LoadingView(spinnerColor: viewModel.category.name.color, textColor: colorScheme == .dark ? .white : Color(hex: "334155"), isSpinning: viewModel.isSpinning, onAppearAction: viewModel.isAppearing)
+                LoadingView(spinnerColor: viewModel.category.name.color, textColor: .textMain, isSpinning: viewModel.isSpinning, onAppearAction: viewModel.isAppearing)
             } else {
                 
                 // Main content
@@ -141,7 +137,7 @@ struct CategoryDetailView: View {
         .padding(.vertical, 24)
         .frame(maxWidth: .infinity)
         .background(
-            GlassmorphicCard(cornerRadius: 25, cardBackgroundColor: cardBackgroundColor)
+            GlassmorphicCard(cornerRadius: 25, cardBackgroundColor: .cardBackgroundColor)
         )
     }
     
@@ -241,7 +237,7 @@ struct CategoryDetailView: View {
         .padding(.horizontal, 15)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            GlassmorphicCard(cornerRadius: 20, cardBackgroundColor: cardBackgroundColor)
+            GlassmorphicCard(cornerRadius: 20, cardBackgroundColor: .cardBackgroundColor)
         )
     }
     
@@ -350,7 +346,7 @@ struct CategoryDetailView: View {
         .padding(.horizontal, 15)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            GlassmorphicCard(cornerRadius: 18, cardBackgroundColor: cardBackgroundColor)
+            GlassmorphicCard(cornerRadius: 18, cardBackgroundColor: .cardBackgroundColor)
         )
     }
     

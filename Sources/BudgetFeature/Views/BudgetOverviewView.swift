@@ -23,15 +23,7 @@ struct BudgetOverviewView: View {
     @State private var avatarScale: CGFloat = 0.0
     
     // Color themes based on light/dark mode
-    private var backgroundGradient: LinearGradient {
-        colorScheme == .dark ?
-            LinearGradient(colors: [Color(hex: "0F172A"), Color(hex: "1E293B")], startPoint: .top, endPoint: .bottom) :
-            LinearGradient(colors: [Color(hex: "F0F9FF"), Color(hex: "E0F2FE")], startPoint: .top, endPoint: .bottom)
-    }
-    
-    private var cardBackgroundColor: Color {
-        colorScheme == .dark ? Color(hex: "1E293B").opacity(0.7) : Color.white.opacity(0.85)
-    }
+    private var backgroundGradient: LinearGradient = .monthlyBackground
 
     var body: some View {
         NavigationStack {
@@ -42,7 +34,7 @@ struct BudgetOverviewView: View {
                 
                 // Main content
                 if viewModel.isLoading {
-                    LoadingView(spinnerColor: Color(hex: "3B82F6"), textColor: colorScheme == .dark ? .white : Color(hex: "334155"), isSpinning: viewModel.isSpinning, onAppearAction: viewModel.loadingIsAppearing)
+                    LoadingView(spinnerColor: .monthlyCategory, textColor: .textMain, isSpinning: viewModel.isSpinning, onAppearAction: viewModel.loadingIsAppearing)
                 } else {
                     ScrollView {
                         VStack(spacing: 24) {
@@ -97,7 +89,7 @@ struct BudgetOverviewView: View {
                 ToolbarItem(placement: .principal) {
                     Text(Localization.budgetOverviewTitle)
                         .font(.system(.headline, design: .rounded, weight: .bold))
-                        .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
+                        .foregroundColor(.textMain)
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -105,14 +97,12 @@ struct BudgetOverviewView: View {
                         // Settings action
                     }) {
                         Image(systemName: Localization.Image.settingIcon)
-                            .foregroundColor(Color(hex: "3B82F6"))
+                            .foregroundColor(.monthlyCategory)
                             .font(.system(size: 18, weight: .semibold))
                             .frame(width: 38, height: 38)
                             .background(
                                 Circle()
-                                    .fill(colorScheme == .dark ? 
-                                          Color(hex: "334155").opacity(0.5) : 
-                                          Color(hex: "EFF6FF"))
+                                    .fill(Color.monthlyCircle)
                             )
                     }
                     .buttonStyle(BounceButtonStyle())
@@ -129,7 +119,7 @@ struct BudgetOverviewView: View {
             Circle()
                 .fill(
                     LinearGradient(
-                        colors: [Color(hex: "3B82F6"), Color(hex: "60A5FA")],
+                        colors: [.monthlyCategory, .lightOrange],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
@@ -140,19 +130,19 @@ struct BudgetOverviewView: View {
                         .font(.system(.headline, design: .rounded, weight: .bold))
                         .foregroundColor(.white)
                 )
-                .shadow(color: Color(hex: "3B82F6").opacity(0.4), radius: 8, x: 0, y: 3)
+                .shadow(color: .monthlyCategory.opacity(0.4), radius: 8, x: 0, y: 3)
                 .scaleEffect(avatarScale)
             
             VStack(alignment: .leading, spacing: 4) {
                 // Greeting
                 Text("Hello, Maksim")
                     .font(.system(.headline, design: .rounded))
-                    .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
+                    .foregroundColor(.textMain)
                 
                 // Current date
                 Text(viewModel.getCurrentDate())
                     .font(.system(.subheadline, design: .rounded))
-                    .foregroundColor(colorScheme == .dark ? Color(hex: "94A3B8") : Color(hex: "64748B"))
+                    .foregroundColor(.textSecondary)
             }
             
             Spacer()
@@ -162,14 +152,12 @@ struct BudgetOverviewView: View {
                 // Notification action
             }) {
                 Image(systemName: Localization.Image.notificationIcon)
-                    .foregroundColor(Color(hex: "3B82F6"))
+                    .foregroundColor(.monthlyCategory)
                     .font(.system(size: 18, weight: .semibold))
                     .frame(width: 38, height: 38)
                     .background(
                         Circle()
-                            .fill(colorScheme == .dark ? 
-                                 Color(hex: "334155").opacity(0.5) : 
-                                 Color(hex: "EFF6FF"))
+                            .fill(Color.monthlyCircle)
                     )
                     .overlay(
                         Circle()
@@ -191,16 +179,16 @@ struct BudgetOverviewView: View {
             HStack {
                 Image(systemName: Localization.Image.monthlyBudgetIcon)
                     .font(.system(size: 26))
-                    .foregroundColor(Color(hex: "3B82F6"))
+                    .foregroundColor(.monthlyCategory)
                     .padding(12)
                     .background(
                         Circle()
-                            .fill(Color(hex: "3B82F6").opacity(0.15))
+                            .fill(Color.monthlyCategory.opacity(0.15))
                     )
                 
                 Text(Localization.monthlyBudget)
                     .font(.system(.title3, design: .rounded, weight: .bold))
-                    .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
+                    .foregroundColor(.textMain)
                 
                 Spacer()
                 
@@ -214,7 +202,7 @@ struct BudgetOverviewView: View {
                         Capsule()
                             .fill(
                                 LinearGradient(
-                                    colors: [Color(hex: "3B82F6"), Color(hex: "60A5FA")],
+                                    colors: [.monthlyCategory, .lightOrange],
                                     startPoint: .leading,
                                     endPoint: .trailing
                                 )
@@ -232,33 +220,33 @@ struct BudgetOverviewView: View {
                 // Budget spent info
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Spent")
+                        Text(Localization.cardSpentTitle)
                             .font(.system(.subheadline, design: .rounded))
-                            .foregroundColor(colorScheme == .dark ? Color(hex: "94A3B8") : Color(hex: "64748B"))
+                            .foregroundColor(.textSecondary)
                         
                         Text(viewModel.getSpentAmount())
                             .font(.system(.title2, design: .rounded, weight: .bold))
-                            .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
+                            .foregroundColor(.textMain)
                     }
                     
                     Spacer()
                     
                     VStack(alignment: .trailing, spacing: 4) {
-                        Text("Budget")
+                        Text(Localization.cardBudgetTitle)
                             .font(.system(.subheadline, design: .rounded))
-                            .foregroundColor(colorScheme == .dark ? Color(hex: "94A3B8") : Color(hex: "64748B"))
+                            .foregroundColor(.textSecondary)
                         
                         Text(viewModel.getTotalBudget())
                             .font(.system(.title2, design: .rounded, weight: .bold))
-                            .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
+                            .foregroundColor(.textMain)
                     }
                 }
                 
                 // Progress bar
                 ProgressBar(
                     value: viewModel.getProgressValue(),
-                    backgroundColor: Color(hex: "3B82F6").opacity(0.2),
-                    foregroundColor: Color(hex: "3B82F6")
+                    backgroundColor: .monthlyCategory.opacity(0.2),
+                    foregroundColor: .monthlyCategory
                 )
                 
                 // Progress info
@@ -269,7 +257,7 @@ struct BudgetOverviewView: View {
                         .foregroundColor(
                             viewModel.getPercentageValue() > 90 ? Color.red :
                                 viewModel.getPercentageValue() > 75 ? Color.orange :
-                                Color(hex: "3B82F6")
+                                    .monthlyCategory
                         )
                     
                     Spacer()
@@ -277,13 +265,13 @@ struct BudgetOverviewView: View {
                     // Remaining budget text
                     Text("\(viewModel.getRemainingBudget()) remaining")
                         .font(.system(.caption, design: .rounded, weight: .medium))
-                        .foregroundColor(colorScheme == .dark ? Color(hex: "94A3B8") : Color(hex: "64748B"))
+                        .foregroundColor(.textSecondary)
                 }
             }
         }
         .padding(20)
         .background(
-            GlassmorphicCard(cornerRadius: 20, cardBackgroundColor: cardBackgroundColor)
+            GlassmorphicCard(cornerRadius: 20, cardBackgroundColor: .cardBackgroundColor)
         )
         .padding(.horizontal, 4)
     }
@@ -294,7 +282,7 @@ struct BudgetOverviewView: View {
             HStack {
                 Text(Localization.categories)
                     .font(.system(.title3, design: .rounded, weight: .bold))
-                    .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
+                    .foregroundColor(.textMain)
                 
                 Spacer()
                 
@@ -302,9 +290,9 @@ struct BudgetOverviewView: View {
                 Button(action: {
                     // Add category action
                 }) {
-                    Label("Add", systemImage: Localization.Image.addIcon)
+                    Label(Localization.addButtonTitle, systemImage: Localization.Image.addIcon)
                         .font(.system(.subheadline, design: .rounded, weight: .medium))
-                        .foregroundColor(Color(hex: "3B82F6"))
+                        .foregroundColor(.monthlyCategory)
                 }
                 .buttonStyle(BounceButtonStyle())
             }
@@ -316,7 +304,7 @@ struct BudgetOverviewView: View {
                     NavigationLink(destination: CategoryDetailView(category: category)) {
                         categoryCard(category)
                             .background(
-                                GlassmorphicCard(cornerRadius: 16, cardBackgroundColor: cardBackgroundColor)
+                                GlassmorphicCard(cornerRadius: 16, cardBackgroundColor: .cardBackgroundColor)
                             )
                             .transition(.opacity)
                             .animation(.easeOut.delay(Double(index) * 0.1), value: categoriesAppeared)
@@ -343,11 +331,11 @@ struct BudgetOverviewView: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text(category.name.title)
                     .font(.system(.headline, design: .rounded, weight: .semibold))
-                    .foregroundColor(colorScheme == .dark ? .white : Color(hex: "334155"))
+                    .foregroundColor(.textMain)
                 
                 Text("\(category.amountSpent.formatCurrency()) of \(category.totalBudget.formatCurrency())")
                     .font(.system(.subheadline, design: .rounded))
-                    .foregroundColor(colorScheme == .dark ? Color(hex: "94A3B8") : Color(hex: "64748B"))
+                    .foregroundColor(.textSecondary)
             }
             
             Spacer()

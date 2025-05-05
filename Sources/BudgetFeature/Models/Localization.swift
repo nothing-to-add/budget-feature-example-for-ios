@@ -14,6 +14,7 @@ struct Localization {
     // General
     static let loading = "Loading..."
     static let backButtonTitle = "Back"
+    static let addButtonTitle = "Add"
 
     // Budget Overview
     static let budgetOverviewTitle = "Budget Overview"
@@ -22,6 +23,8 @@ struct Localization {
     static let monthlyBudget = "Monthly Budget"
     static let categories = "Categories"
     static let pieChartTitle = "Budget Categories"
+    static let cardSpentTitle = "Spent"
+    static let cardBudgetTitle = "Budget"
 
     // Category Detail
     static let totalSpent = "Total spent:"
