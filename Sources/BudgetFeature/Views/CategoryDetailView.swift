@@ -44,7 +44,7 @@ struct CategoryDetailView: View {
                 
                 // Main content
                 ScrollView {
-                    VStack(spacing: 25) {
+                    VStack(spacing: Constants.Spacing.extraLarge) {
                         // Fancy header with category name and visualizer
                         headerView
                             .padding(.top, 20)
@@ -65,7 +65,6 @@ struct CategoryDetailView: View {
                     }
                     .padding(.horizontal)
                 }
-//                .overlay(loadingOverlay)
                 
                 // Floating action button
                 VStack {
@@ -93,7 +92,7 @@ struct CategoryDetailView: View {
     // MARK: - Sub Views
     
     private var headerView: some View {
-        VStack(spacing: 15) {
+        VStack(spacing: Constants.Spacing.large) {
             // Category icon in shimmering circle
             ZStack {
                 Circle()
@@ -142,7 +141,7 @@ struct CategoryDetailView: View {
     }
     
     private var budgetProgressView: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: Constants.Spacing.medium) {
             // Progress bar
             ProgressBar(
                 value: viewModel.getProgressValue(),
@@ -180,7 +179,7 @@ struct CategoryDetailView: View {
     }
     
     private var budgetStatsView: some View {
-        HStack(spacing: 15) {
+        HStack(spacing: Constants.Spacing.large) {
             // Total spent card
             statCard(
                 title: Localization.totalSpent,
@@ -202,7 +201,7 @@ struct CategoryDetailView: View {
     }
     
     private var transactionsView: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: Constants.Spacing.large) {
             // Section title with icon
             HStack {
                 Image(systemName: Localization.Image.transactionListIcon)
@@ -221,7 +220,7 @@ struct CategoryDetailView: View {
                 emptyTransactionsView
             } else {
                 // Transactions list with fancy cards
-                VStack(spacing: 12) {
+                VStack(spacing: Constants.Spacing.medium) {
                     ForEach(Array(viewModel.transactions.enumerated()), id: \.element.description) { index, transaction in
                         transactionCard(transaction: transaction)
                             .transition(.asymmetric(
@@ -242,7 +241,7 @@ struct CategoryDetailView: View {
     }
     
     private var emptyTransactionsView: some View {
-        VStack(spacing: 15) {
+        VStack(spacing: Constants.Spacing.large) {
             Image(systemName: Localization.Image.emptyTransactionIcon)
                 .font(.system(size: 40))
                 .foregroundColor(.secondary)
@@ -292,7 +291,7 @@ struct CategoryDetailView: View {
                 dismiss()
             }
         }) {
-            HStack(spacing: 5) {
+            HStack(spacing: Constants.Spacing.small) {
                 Image(systemName: Localization.Image.backButtonIcon)
                     .font(.title3)
                 
@@ -313,7 +312,7 @@ struct CategoryDetailView: View {
     // MARK: - Helper Views
     
     private func statCard(title: String, value: String, icon: String, iconColor: Color, gradientColors: [Color]) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: Constants.Spacing.medium) {
             // Icon in gradient circle
             Image(systemName: icon)
                 .font(.title)
@@ -332,7 +331,7 @@ struct CategoryDetailView: View {
                 .shadow(color: iconColor.opacity(0.3), radius: 5, x: 0, y: 3)
             
             // Stat info
-            VStack(alignment: .leading, spacing: 5) {
+            VStack(alignment: .leading, spacing: Constants.Spacing.small) {
                 Text(title)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
@@ -351,7 +350,7 @@ struct CategoryDetailView: View {
     }
     
     private func transactionCard(transaction: Transaction) -> some View {
-        HStack(spacing: 15) {
+        HStack(spacing: Constants.Spacing.large) {
             // Transaction icon based on description
             Image(systemName: iconForTransaction(transaction))
                 .font(.headline)
@@ -363,7 +362,7 @@ struct CategoryDetailView: View {
                 )
             
             // Transaction details
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: Constants.Spacing.small) {
                 Text(transaction.description)
                     .font(.headline)
                     .foregroundColor(colorScheme == .dark ? .white : .primary)

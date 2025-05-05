@@ -37,7 +37,7 @@ struct BudgetOverviewView: View {
                     LoadingView(spinnerColor: .monthlyCategory, textColor: .textMain, isSpinning: viewModel.isSpinning, onAppearAction: viewModel.loadingIsAppearing)
                 } else {
                     ScrollView {
-                        VStack(spacing: 24) {
+                        VStack(spacing: Constants.Spacing.extraLarge) {
                             // Header with title and avatar
                             headerView
                                 .scaleEffect(headerAppeared ? 1.0 : 0.9)
@@ -67,7 +67,7 @@ struct BudgetOverviewView: View {
                                     },
                                     title: Localization.pieChartTitle
                                 )
-                                .padding(.horizontal)
+                                .frame(maxWidth: .infinity)
                                 .scaleEffect(chartAppeared ? 1.0 : 0.8)
                                 .opacity(chartAppeared ? 1.0 : 0)
                             }
@@ -114,7 +114,7 @@ struct BudgetOverviewView: View {
     // MARK: - Subviews
     
     private var headerView: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: Constants.Spacing.large) {
             // User avatar
             Circle()
                 .fill(
@@ -133,7 +133,7 @@ struct BudgetOverviewView: View {
                 .shadow(color: .monthlyCategory.opacity(0.4), radius: 8, x: 0, y: 3)
                 .scaleEffect(avatarScale)
             
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: Constants.Spacing.small) {
                 // Greeting
                 Text("Hello, Maksim")
                     .font(.system(.headline, design: .rounded))
@@ -174,7 +174,7 @@ struct BudgetOverviewView: View {
     }
     
     private func monthlyBudgetCard() -> some View {
-        VStack(spacing: 20) {
+        VStack(spacing: Constants.Spacing.heavy) {
             // Top section with icon and title
             HStack {
                 Image(systemName: Localization.Image.monthlyBudgetIcon)
@@ -216,7 +216,7 @@ struct BudgetOverviewView: View {
                 .frame(height: 1)
             
             // Budget progress section
-            VStack(spacing: 12) {
+            VStack(spacing: Constants.Spacing.medium) {
                 // Budget spent info
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
@@ -277,7 +277,7 @@ struct BudgetOverviewView: View {
     }
     
     private var categoriesSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: Constants.Spacing.large) {
             // Section header
             HStack {
                 Text(Localization.categories)
@@ -299,7 +299,7 @@ struct BudgetOverviewView: View {
             .padding(.horizontal, 4)
             
             // Categories list
-            VStack(spacing: 12) {
+            VStack(spacing: Constants.Spacing.medium) {
                 ForEach(Array(viewModel.categories.enumerated()), id: \.element.name) { index, category in
                     NavigationLink(destination: CategoryDetailView(category: category)) {
                         categoryCard(category)
@@ -315,7 +315,7 @@ struct BudgetOverviewView: View {
     }
     
     private func categoryCard(_ category: BudgetCategory) -> some View {
-        HStack(spacing: 16) {
+        HStack(spacing: Constants.Spacing.large) {
             // Category icon
             Image(systemName: category.name.icon)
                 .font(.system(size: 20))
@@ -328,7 +328,7 @@ struct BudgetOverviewView: View {
                 .shadow(color: category.name.color.opacity(0.3), radius: 5, x: 0, y: 2)
             
             // Category details
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: Constants.Spacing.small) {
                 Text(category.name.title)
                     .font(.system(.headline, design: .rounded, weight: .semibold))
                     .foregroundColor(.textMain)
@@ -341,7 +341,7 @@ struct BudgetOverviewView: View {
             Spacer()
             
             // Progress indicator
-            VStack(alignment: .trailing, spacing: 6) {
+            VStack(alignment: .trailing, spacing: Constants.Spacing.small) {
                 let percentage = Int((category.amountSpent / category.totalBudget) * 100)
                 
                 Text("\(percentage)%")
