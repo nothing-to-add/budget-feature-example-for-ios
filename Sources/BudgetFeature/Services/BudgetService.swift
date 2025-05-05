@@ -10,47 +10,20 @@
 
 import Foundation
 
-@MainActor
-final class BudgetService {
-    static let shared = BudgetService()
-
-    private init() {}
-
-    private let delayTime = 1.0
-
+final class BudgetService: BudgetServiceProtocol {
+    
     func fetchMonthlyBudget() async -> BudgetCategory {
-        await performWithDelay(returning: BudgetServiceMockData.monthlyBudget)
+        //Placeholder for HTTPS request
+        return .init(name: BudgetCategories.food, amountSpent: 0, totalBudget: 0)
     }
-
+    
     func fetchCategories() async -> [BudgetCategory] {
-        await performWithDelay(returning: BudgetServiceMockData.categories)
+        //Placeholder for HTTPS request
+        return []
     }
     
     func fetchTransactions(for category: BudgetCategories) async -> [Transaction] {
-        let transactions: [Transaction]
-        
-        switch category {
-        case .food:
-            transactions = BudgetServiceMockData.foodTransactions
-        case .shopping:
-            transactions = BudgetServiceMockData.shoppingTransactions
-        case .travel:
-            transactions = BudgetServiceMockData.travelTransactions
-        case .monthly:
-            transactions = [] // Skip monthly category
-        }
-        
-        return await performWithDelay(returning: transactions)
-    }
-}
-
-private extension BudgetService {
-    
-    func performWithDelay<T>(returning data: T) async -> T {
-        await withCheckedContinuation { continuation in
-            DispatchQueue.main.asyncAfter(deadline: .now() + delayTime) {
-                continuation.resume(returning: data)
-            }
-        }
+        //Placeholder for HTTPS request
+        return []
     }
 }

@@ -1,3 +1,13 @@
+//
+//  File name: CategoryDetailViewModel.swift
+//  Project name: BudgetFeature
+//  Workspace name: budget-feature-example-for-ios
+//
+//  Created by: nothing-to-add on 05/05/2025
+//  Using Swift 6.0
+//  Copyright (c) 2023 nothing-to-add
+//
+
 import Foundation
 
 @MainActor
@@ -7,10 +17,11 @@ class CategoryDetailViewModel: ObservableObject {
     @Published var isSpinning = false
     let category: BudgetCategory
 
-    private let budgetService = BudgetService.shared
+    private let budgetService: BudgetServiceProtocol
 
-    init(category: BudgetCategory) {
+    init(category: BudgetCategory, budgetService: BudgetServiceProtocol = ServiceManager.shared.getBudgetService()) {
         self.category = category
+        self.budgetService = budgetService
     }
 
     func loadTransactions() {

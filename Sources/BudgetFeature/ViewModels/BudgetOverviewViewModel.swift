@@ -1,3 +1,13 @@
+//
+//  File name: BudgetOverviewViewModel.swift
+//  Project name: BudgetFeature
+//  Workspace name: budget-feature-example-for-ios
+//
+//  Created by: nothing-to-add on 05/05/2025
+//  Using Swift 6.0
+//  Copyright (c) 2023 nothing-to-add
+//
+
 import Foundation
 
 @MainActor
@@ -7,15 +17,19 @@ class BudgetOverviewViewModel: ObservableObject {
     @Published var isLoading = true
     @Published var isSpinning = false
 
-    private let budgetService = BudgetService.shared
+    private let budgetService: BudgetServiceProtocol
 
-    init() {}
+    init(budgetService: BudgetServiceProtocol = ServiceManager.shared.getBudgetService()) {
+        self.budgetService = budgetService
+    }
 
     func loadBudgetData() {
         Task {
             isLoading = true
+            
             monthlyBudget = await budgetService.fetchMonthlyBudget()
             categories = await budgetService.fetchCategories()
+            
             isLoading = false
             isSpinning = false
         }
