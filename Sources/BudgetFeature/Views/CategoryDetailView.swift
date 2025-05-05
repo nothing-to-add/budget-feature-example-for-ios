@@ -29,8 +29,8 @@ struct CategoryDetailView: View {
     // Color themes based on light/dark mode
     private var backgroundGradient: LinearGradient {
         colorScheme == .dark ?
-            LinearGradient(colors: [Color.black, Color(hex: "1A1A2E")], startPoint: .top, endPoint: .bottom) :
-            LinearGradient(colors: [Color(hex: "F9FAFB"), Color(hex: "EEF2FF")], startPoint: .top, endPoint: .bottom)
+        LinearGradient(colors: [viewModel.category.name.color.opacity(0.1), viewModel.category.name.color.opacity(0.3)], startPoint: .top, endPoint: .bottom) :
+        LinearGradient(colors: [viewModel.category.name.color.opacity(0.1), viewModel.category.name.color.opacity(0.3)], startPoint: .top, endPoint: .bottom)
     }
     
     var body: some View {
