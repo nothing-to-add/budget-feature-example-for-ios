@@ -1,5 +1,15 @@
 # 💸 Budget Feature Example for iOS
 
+[![Swift](https://img.shields.io/badge/Swift-6.0-FA7343.svg?style=flat&logo=swift)](https://swift.org)
+[![iOS](https://img.shields.io/badge/iOS-17.0+-blue.svg?style=flat&logo=apple)](https://developer.apple.com/ios/)
+[![GitHub tag](https://img.shields.io/github/v/tag/nothing-to-add/budget-feature-example-for-ios?style=flat&logo=github)](https://github.com/nothing-to-add/budget-feature-example-for-ios/tags)
+[![GitHub stars](https://img.shields.io/github/stars/nothing-to-add/budget-feature-example-for-ios?style=flat&logo=github)](https://github.com/nothing-to-add/budget-feature-example-for-ios/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/nothing-to-add/budget-feature-example-for-ios?style=flat&logo=github)](https://github.com/nothing-to-add/budget-feature-example-for-ios/issues)
+[![GitHub contributors](https://img.shields.io/github/contributors/nothing-to-add/budget-feature-example-for-ios?style=flat&logo=github)](https://github.com/nothing-to-add/budget-feature-example-for-ios/graphs/contributors)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/nothing-to-add/budget-feature-example-for-ios?style=flat&logo=github)](https://github.com/nothing-to-add/budget-feature-example-for-ios/commits/main)
+[![GitHub top language](https://img.shields.io/github/languages/top/nothing-to-add/budget-feature-example-for-ios?style=flat&logo=swift)](https://github.com/nothing-to-add/budget-feature-example-for-ios)
+[![License](https://img.shields.io/github/license/nothing-to-add/budget-feature-example-for-ios?style=flat)](LICENSE.md)
+
 This repository demonstrates a modular **Budget Feature** implemented as a **Swift Package**, built using **SwiftUI**, following the **MVVM architecture** with a **Router navigation pattern** and **mocked data** instead of live HTTPS requests.
 
 > ✅ Designed to be clean, testable, and easy to extend or integrate into a larger app.
