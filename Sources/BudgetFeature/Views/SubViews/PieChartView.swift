@@ -15,8 +15,6 @@ struct PieChartView: View {
     let data: [ChartDataEntry]
     let title: String
     
-    @State private var animationProgress: CGFloat = 0.0
-    
     var chartColor: Color = .blue
     var titleColor: Color = .primary
     var animationDuration: Double = 1.0
@@ -41,11 +39,6 @@ struct PieChartView: View {
                 .fill(Color(UIColor.systemBackground))
                 .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
         )
-        .onAppear {
-            withAnimation(.easeInOut(duration: animationDuration)) {
-                animationProgress = 1.0
-            }
-        }
     }
     
     private var chartTitle: some View {
@@ -59,19 +52,17 @@ struct PieChartView: View {
     private var pieChart: some View {
         Chart(data) { entry in
             SectorMark(
-                angle: .value("Value", entry.value * animationProgress),
+                angle: .value("Value", entry.value),
                 innerRadius: .ratio(0.5),
                 outerRadius: .ratio(1.0)
             )
             .foregroundStyle(by: .value("Label", entry.label))
             .cornerRadius(4)
             .annotation(position: .overlay) {
-                if animationProgress > 0.5 { // Only show when animation is more than half complete
-                    Text("\(Int(percentageFor(entry: entry)))%")
-                        .font(.title3.bold())
-                        .foregroundColor(.white)
-                        .shadow(color: .black.opacity(0.7), radius: 2, x: 0, y: 0)
-                }
+                Text("\(Int(percentageFor(entry: entry)))%")
+                    .font(.title3.bold())
+                    .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.7), radius: 2, x: 0, y: 0)
             }
         }
         .chartLegend(.hidden)
