@@ -16,7 +16,8 @@ class CategoryDetailViewModel: ObservableObject {
     @Published var isLoading = true
     @Published var isSpinning = false
     let category: BudgetCategory
-
+    
+    private var transactionsTask: Task<Void, Never>?
     private let budgetService: BudgetServiceProtocol
 
     init(category: BudgetCategory, budgetService: BudgetServiceProtocol = ServiceManager.shared.getBudgetService()) {
@@ -25,7 +26,8 @@ class CategoryDetailViewModel: ObservableObject {
     }
 
     func loadTransactions() {
-        Task {
+        transactionsTask?.cancel()
+        transactionsTask = Task {
             isLoading = true
             transactions = await budgetService.fetchTransactions(for: category.name)
             isLoading = false
@@ -55,5 +57,9 @@ class CategoryDetailViewModel: ObservableObject {
     
     func getTotalBudget() -> String {
         category.totalBudget.formatCurrency()
+    }
+    
+    deinit {
+        transactionsTask?.cancel()
     }
 }
